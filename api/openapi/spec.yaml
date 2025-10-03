@@ -1,0 +1,15 @@
+openapi: 3.0.3
+info:
+  title: Subscription Service API
+  description: API for managing user subscriptions
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local development server
+
+paths:
+  $ref: "./paths/index.yaml"
+
+components:
+  $ref: "./components/index.yaml"

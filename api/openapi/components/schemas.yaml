@@ -1,0 +1,72 @@
+schemas:
+  Subscription:
+    type: object
+    properties:
+      sub_id:
+        type: number
+        nullable: true
+      service_name:
+        type: string
+      price:
+        type: number
+        format: int64
+    required:
+      - service_name
+      - price
+
+  SubscriptionUser:
+    allOf:
+      - $ref: "#/schemas/Subscription"
+      - type: object
+    properties:
+      user_id:
+        type: string
+      start_date:
+        type: string
+        format: date
+    required:
+      - user_id
+      - start_date
+
+  SubscriptionUserCreate:
+    type: object
+    properties:
+      sub_id:
+        type: number
+      user_id:
+        type: string
+      start_date:
+        type: string
+        format: date
+      end_date:
+        type: string
+        format: date
+    required:
+      - sub_id
+      - user_id
+      - start_date
+
+  SubSum:
+    type: object
+    properties:
+      user_id:
+        type: string
+      start_date:
+        type: string
+        format: date
+      end_date:
+        type: string
+        format: date
+      total_sum:
+        type: number
+        format: float
+
+  ErrorResponse:
+    type: object
+    properties:
+      error:
+        type: string
+      code:
+        type: integer
+      details:
+        type: string

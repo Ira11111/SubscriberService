@@ -1,0 +1,35 @@
+get:
+  summary: Subscription list
+  parameters:
+    - $ref: "./../components/parameters.yaml#/parameters/LimitParam"
+    - $ref: "./../components/parameters.yaml#/parameters/OffsetParam"
+    - $ref: "./../components/parameters.yaml#/parameters/SubNameParam"
+  responses:
+    200:
+      description: Subscriptions
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "./../components/schemas.yaml#/schemas/Subscription"
+
+post:
+  summary: Create new subscription
+  requestBody:
+    required: True
+    content:
+      application/json:
+        schema:
+          $ref: "./../components/schemas.yaml#/schemas/Subscription"
+  responses:
+    400:
+      $ref: "./../components/responses.yaml#/responses/BadRequest"
+    201:
+      description: Subscription created
+      content:
+        application/json:
+          schema:
+            $ref: "./../components/schemas.yaml#/schemas/Subscription"
+
+

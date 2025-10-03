@@ -1,0 +1,14 @@
+/subscriptions:
+  $ref: "./subscription.yaml"
+
+/subscriptions/{id}:
+  $ref: "./subscription-id.yaml"
+
+/subscriptions-users:
+  $ref: "./subscription.yaml"
+
+/subscriptions-users/{id}:
+  $ref: "./subscription-id.yaml"
+
+/subscriptions-users/total:
+  $ref: "./sub-total.yaml"

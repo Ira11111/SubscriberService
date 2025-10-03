@@ -1,0 +1,40 @@
+get:
+  summary: Subscription by id
+  parameters:
+    - $ref: "./../components/parameters.yaml#/parameters/IdParam"
+  responses:
+    200:
+      description: Subscription
+      content:
+        application/json:
+          schema:
+            $ref: "./../components/schemas.yaml#/schemas/Subscription"
+
+put:
+  summary: Update subscription
+  parameters:
+    - $ref: "./../components/parameters.yaml#/parameters/IdParam"
+  requestBody:
+    required: True
+    content:
+      application/json:
+        schema:
+          $ref: "./../components/schemas.yaml#/schemas/Subscription"
+  responses:
+    400:
+      $ref: "./../components/responses.yaml#/responses/BadRequest"
+    201:
+      description: Subscription updated
+      content:
+        application/json:
+          schema:
+            $ref: "./../components/schemas.yaml#/schemas/Subscription"
+
+delete:
+  summary: Delete subscription
+  parameters:
+    - $ref: "./../components/parameters.yaml#/parameters/IdParam"
+  responses:
+    204:
+      description: Subscription deleted
+

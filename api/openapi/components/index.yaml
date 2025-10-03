@@ -1,0 +1,9 @@
+# components/index.yaml - Вариант 2
+schemas:
+  $ref: "./schemas.yaml#/schemas"
+
+parameters:
+  $ref: "./parameters.yaml#/parameters"
+
+responses:
+  $ref: "./responses.yaml#/responses"

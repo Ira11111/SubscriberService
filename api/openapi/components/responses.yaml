@@ -1,0 +1,14 @@
+responses:
+  BadRequest:
+    description: Invalid data
+    content:
+      application/json:
+        schema:
+          $ref: "./schemas.yaml#/schemas/ErrorResponse"
+
+  NotFound:
+    description: Resource not found
+    content:
+      application/json:
+        schema:
+          $ref: "./schemas.yaml#/schemas/ErrorResponse"
