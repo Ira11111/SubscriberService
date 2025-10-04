@@ -1,19 +1,21 @@
 get:
-  summary: Subscription with user by rel id
+  summary: Subscription with user by subscription and user IDs
   parameters:
-    - $ref: "./../components/parameters.yaml#/parameters/IdParam"
+    - $ref: "./../components/parameters.yaml#/parameters/IdSubParam"
+    - $ref: "./../components/parameters.yaml#/parameters/IdUserParam"
   responses:
     200:
-      description: Subscription
+      description: Subscription with user
       content:
         application/json:
           schema:
             $ref: "./../components/schemas.yaml#/schemas/SubscriptionUser"
 
 put:
-  summary: Update subscription with user
+  summary: Update user subscription
   parameters:
-    - $ref: "./../components/parameters.yaml#/parameters/IdParam"
+    - $ref: "./../components/parameters.yaml#/parameters/IdUserParam"
+    - $ref: "./../components/parameters.yaml#/parameters/IdSubParam"
   requestBody:
     required: True
     content:
@@ -31,10 +33,10 @@ put:
             $ref: "./../components/schemas.yaml#/schemas/SubscriptionUser"
 
 delete:
-  summary: Delete subscription
+  summary: Delete user subscription
   parameters:
-    - $ref: "./../components/parameters.yaml#/parameters/IdParam"
+    - $ref: "./../components/parameters.yaml#/parameters/IdUserParam"
+    - $ref: "./../components/parameters.yaml#/parameters/IdSubParam"
   responses:
     204:
       description: User unsubscribed deleted
-

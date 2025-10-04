@@ -13,12 +13,20 @@ parameters:
       type: integer
       format: int64
       default: 0
-  IdParam:
+
+  IdUserParam:
     name: id
     in: path
     required: true
     schema:
       type: string
+
+  IdSubParam:
+    name: id
+    in: path
+    required: true
+    schema:
+      type: number
 
   StartDateParam:
     name: start_date
@@ -37,13 +45,6 @@ parameters:
       type: string
       format: date
       example: "2024-01-01"
-
-  UserIdParam:
-    name: user_id
-    in: query
-    description: user id
-    schema:
-      type: string
 
   SubNameParam:
     name: sub_name

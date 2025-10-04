@@ -1,0 +1,17 @@
+get:
+  summary: Subscription with user by subscription id
+  parameters:
+    - $ref: "./../components/parameters.yaml#/parameters/LimitParam"
+    - $ref: "./../components/parameters.yaml#/parameters/OffsetParam"
+    - $ref: "./../components/parameters.yaml#/parameters/StartDateParam"
+    - $ref: "./../components/parameters.yaml#/parameters/EndDateParam"
+    - $ref: "./../components/parameters.yaml#/parameters/IdSubParam"
+  responses:
+    200:
+      description: Subscription with users
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "./../components/schemas.yaml#/schemas/SubscriptionUser"

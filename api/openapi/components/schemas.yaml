@@ -24,6 +24,9 @@ schemas:
       start_date:
         type: string
         format: date
+      end_date:
+        type: string
+        format: date
     required:
       - user_id
       - start_date
@@ -36,9 +39,6 @@ schemas:
       user_id:
         type: string
       start_date:
-        type: string
-        format: date
-      end_date:
         type: string
         format: date
     required:

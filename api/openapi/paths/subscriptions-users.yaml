@@ -5,7 +5,6 @@ get:
     - $ref: "./../components/parameters.yaml#/parameters/OffsetParam"
     - $ref: "./../components/parameters.yaml#/parameters/StartDateParam"
     - $ref: "./../components/parameters.yaml#/parameters/EndDateParam"
-    - $ref: "./../components/parameters.yaml#/parameters/UserIdParam"
     - $ref: "./../components/parameters.yaml#/parameters/SubNameParam"
   responses:
     200:
@@ -34,5 +33,3 @@ post:
         application/json:
           schema:
             $ref: "./../components/schemas.yaml#/schemas/SubscriptionUserCreate"
-
-

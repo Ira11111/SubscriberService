@@ -4,11 +4,17 @@
 /subscriptions/{id}:
   $ref: "./subscription-id.yaml"
 
-/subscriptions-users:
-  $ref: "./subscription.yaml"
+/subscriptions/users:
+  $ref: "./subscriptions-users.yaml"
 
-/subscriptions-users/{id}:
-  $ref: "./subscription-id.yaml"
+/subscriptions/users/{id}:
+  $ref: "./subscriptions-users-id.yaml"
 
-/subscriptions-users/total:
+/subscriptions/{id}/users:
+  $ref: "./subscriptions-id-users.yaml"
+
+/subscriptions/{id}/users/{id}:
+  $ref: "./subscriptions-id-users-id.yaml"
+
+/subscriptions/users/{id}/total:
   $ref: "./sub-total.yaml"
