@@ -1,20 +1,20 @@
 /subscriptions:
   $ref: "./subscription.yaml"
 
-/subscriptions/{id}:
+/subscriptions/{sub_id}:
   $ref: "./subscription-id.yaml"
 
 /subscriptions/users:
   $ref: "./subscriptions-users.yaml"
 
-/subscriptions/users/{id}:
+/subscriptions/users/{user_id}:
   $ref: "./subscriptions-users-id.yaml"
 
-/subscriptions/{id}/users:
+/subscriptions/{sub_id}/users:
   $ref: "./subscriptions-id-users.yaml"
 
-/subscriptions/{id}/users/{id}:
+/subscriptions/{sub_id}/users/{user_id}:
   $ref: "./subscriptions-id-users-id.yaml"
 
-/subscriptions/users/{id}/total:
+/subscriptions/users/{user_id}/total:
   $ref: "./sub-total.yaml"

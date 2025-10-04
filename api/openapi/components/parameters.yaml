@@ -15,14 +15,14 @@ parameters:
       default: 0
 
   IdUserParam:
-    name: id
+    name: user_id
     in: path
     required: true
     schema:
       type: string
 
   IdSubParam:
-    name: id
+    name: sub_id
     in: path
     required: true
     schema:
