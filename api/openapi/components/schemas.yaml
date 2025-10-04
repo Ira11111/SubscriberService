@@ -9,7 +9,6 @@ schemas:
         type: string
       price:
         type: number
-        format: int64
     required:
       - service_name
       - price

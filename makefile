@@ -9,3 +9,7 @@ install-api-tool:
 gen-chi-server:
 	mkdir -p ./api/generated
 	bash -c 'oapi-codegen -generate chi-server -package generated <(npx swagger-cli bundle api/openapi/spec.yaml --type yaml) > api/generated/server.gen.go'
+
+gen-types:
+	mkdir -p ./api/generated
+	bash -c 'oapi-codegen -generate types -package generated <(npx swagger-cli bundle api/openapi/spec.yaml --type yaml) > api/generated/types.gen.go'
