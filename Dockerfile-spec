@@ -1,0 +1,10 @@
+FROM node:18-alpine AS builder
+RUN npm install -g swagger-cli
+COPY api/openapi/spec.yaml /api/spec.yaml
+COPY api/openapi/paths/ /api/paths/
+COPY api/openapi/components/ /api/components/
+RUN npx swagger-cli validate api/spec.yaml
+RUN swagger-cli bundle /api/spec.yaml -o /api/bundle.yaml --type yaml
+
+FROM swaggerapi/swagger-ui
+COPY --from=builder /api/bundle.yaml /api/bundle.yaml
