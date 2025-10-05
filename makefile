@@ -1,4 +1,5 @@
 .PHONY: $(MAKECMDGOALS)
+COMPILED ?= false
 
 install-api-tool:
 	go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@v2.5.0
@@ -23,3 +24,17 @@ migrate-up:
 	goose up
 migrate-down:
 	goose down-to 00001
+
+build:
+	go build -o ./bin/app ./cmd/main.go
+
+run:
+ifeq ($(COMPILED), true)
+	ifeq ($(test -f ./bin/app), 1)
+		./bin/app
+	else
+		@echo "Binary not found"
+	endif
+else
+	go run ./cmd/main.go
+endif
