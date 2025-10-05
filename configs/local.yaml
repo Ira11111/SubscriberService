@@ -1,7 +1,7 @@
 env: local
 
 db:
-  host: 172.17.0.2
+  host: 172.20.0.2
   port: 5432
   database: subscription_service
   user: user

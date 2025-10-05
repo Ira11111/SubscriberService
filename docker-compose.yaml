@@ -7,6 +7,10 @@ services:
       - "80:8080"
     environment:
       - SWAGGER_JSON=/api/bundle.yaml
+    networks:
+      interface_net:
+        ipv4_address: 172.21.0.2
+
 
   db:
     image: postgres:16-alpine
@@ -18,6 +22,24 @@ services:
       POSTGRES_PASSWORD: password
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      app_net:
+        ipv4_address: 172.20.0.2
 
 volumes:
   postgres_data:
+
+networks:
+  app_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+          gateway: 172.20.0.1
+
+  interface_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/24
+          gateway: 172.21.0.1
