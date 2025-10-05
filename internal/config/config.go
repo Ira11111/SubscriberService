@@ -26,37 +26,27 @@ type DBConfig struct {
 	SSLMode  string `yaml:"ssl_mode"`
 }
 type ServerConfig struct {
-	Host            string        `yaml:"host" env-default:"localhost"`
-	Port            int           `yaml:"port" env-default:"8080"`
-	ReadTimeout     time.Duration `yaml:"read_timeout" env-default:"30s"`
-	WriteTimeout    time.Duration `yaml:"write_timeout" env-default:"30s"`
-	IdleTimeout     time.Duration `yaml:"idle_timeout" env-default:"60s"`
-	ShutdownTimeout time.Duration `yaml:"shutdown_timeout" env-default:"10s"`
-
-	RateLimit  RateLimitConfig  `yaml:"rate_limit"`
-	Middleware MiddlewareConfig `yaml:"middleware"`
+	Host            string           `yaml:"host" env-default:"localhost"`
+	Port            int              `yaml:"port" env-default:"8080"`
+	ReadTimeout     time.Duration    `yaml:"read_timeout" env-default:"30s"`
+	WriteTimeout    time.Duration    `yaml:"write_timeout" env-default:"30s"`
+	IdleTimeout     time.Duration    `yaml:"idle_timeout" env-default:"60s"`
+	ShutdownTimeout time.Duration    `yaml:"shutdown_timeout" env-default:"10s"`
+	Middleware      MiddlewareConfig `yaml:"middleware"`
 }
 
 type MiddlewareConfig struct {
-	Logger    LoggerConfig    `yaml:"logger"`
-	Recovery  RecoveryConfig  `yaml:"recovery"`
-	Timeout   TimeoutConfig   `yaml:"timeout"`
-	RateLimit RateLimitConfig `yaml:"rate_limit"`
-}
-
-type RateLimitConfig struct {
-	RequestsPerSecond int `yaml:"requests_per_second"`
-	Burst             int `yaml:"burst"`
+	Logger   LoggerConfig   `yaml:"logger"`
+	Recovery RecoveryConfig `yaml:"recovery"`
+	Timeout  TimeoutConfig  `yaml:"timeout"`
 }
 
 type LoggerConfig struct {
-	Enabled bool   `yaml:"enabled"`
-	Format  string `yaml:"format"`
+	Enabled bool `yaml:"enabled"`
 }
 
 type RecoveryConfig struct {
-	Enabled   bool `yaml:"enabled"`
-	StackSize int  `yaml:"stack_size"`
+	Enabled bool `yaml:"enabled"`
 }
 
 type TimeoutConfig struct {

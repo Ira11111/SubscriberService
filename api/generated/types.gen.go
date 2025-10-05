@@ -18,20 +18,20 @@ type ErrorResponse struct {
 type SubSum struct {
 	EndDate   *openapi_types.Date `json:"end_date,omitempty"`
 	StartDate *openapi_types.Date `json:"start_date,omitempty"`
-	TotalSum  *float32            `json:"total_sum,omitempty"`
+	TotalSum  *int64              `json:"total_sum,omitempty"`
 	UserId    *string             `json:"user_id,omitempty"`
 }
 
 // Subscription defines model for Subscription.
 type Subscription struct {
-	Price       float32  `json:"price"`
+	Price       int64    `json:"price"`
 	ServiceName string   `json:"service_name"`
 	SubId       *float32 `json:"sub_id"`
 }
 
 // SubscriptionUser defines model for SubscriptionUser.
 type SubscriptionUser struct {
-	Price       float32  `json:"price"`
+	Price       int64    `json:"price"`
 	ServiceName string   `json:"service_name"`
 	SubId       *float32 `json:"sub_id"`
 }
@@ -47,7 +47,7 @@ type SubscriptionUserCreate struct {
 type EndDateParam = openapi_types.Date
 
 // IdSubParam defines model for IdSubParam.
-type IdSubParam = float32
+type IdSubParam = int64
 
 // IdUserParam defines model for IdUserParam.
 type IdUserParam = string

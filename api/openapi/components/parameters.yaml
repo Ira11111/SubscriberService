@@ -26,7 +26,8 @@ parameters:
     in: path
     required: true
     schema:
-      type: number
+      type: integer
+      format: int64
 
   StartDateParam:
     name: start_date

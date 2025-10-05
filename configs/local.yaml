@@ -20,21 +20,12 @@ server:
     # Logger
     logger:
       enabled: true
-      format: "text"
 
     # Recovery
     recovery:
       enabled: true
-      stack_size: 1024
 
     # Timeout
     timeout:
       enabled: true
       duration: "30s"
-
-    # Rate Limiting
-    rate_limit:
-      enabled: true
-      requests: 100
-      window: "1m"
-      burst: 50
