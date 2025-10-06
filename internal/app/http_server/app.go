@@ -4,6 +4,7 @@ import (
 	"SubscriberService/api/generated"
 	"SubscriberService/internal/config"
 	"SubscriberService/internal/http/handler"
+	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -11,7 +12,7 @@ import (
 )
 
 type ServerApp struct {
-	server *http.Server
+	Server *http.Server
 }
 
 func NewServer(cfg *config.ServerConfig, handler *handler.Handler) *ServerApp {
@@ -36,7 +37,7 @@ func NewServer(cfg *config.ServerConfig, handler *handler.Handler) *ServerApp {
 	generated.HandlerFromMux(handler, r)
 
 	srv := &http.Server{
-		Addr:         cfg.Host,
+		Addr:         fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
 		Handler:      r,
 		ReadTimeout:  cfg.ReadTimeout,
 		WriteTimeout: cfg.WriteTimeout,
@@ -44,11 +45,6 @@ func NewServer(cfg *config.ServerConfig, handler *handler.Handler) *ServerApp {
 	}
 
 	return &ServerApp{
-		server: srv,
+		Server: srv,
 	}
-}
-
-// TODO: перделать
-func (s *ServerApp) Run() error {
-	return s.server.ListenAndServe()
 }
