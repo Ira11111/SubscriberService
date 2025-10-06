@@ -1,13 +1,12 @@
 package postgres
 
 import (
-	t "SubscriberService/api/generated"
+	d "SubscriberService/internal/domains"
+	"context"
 	"time"
-
-	"github.com/go-chi/chi/v5"
 )
 
-func (s *Storage) SaveUserSub(ctx context.Context, userSub *t.SubscriptionUserCreate) (*t.SubscriptionUser, error) {
+func (s *Storage) SaveUserSub(ctx context.Context, userSub *d.SubscriptionUserCreate) (*d.SubscriptionUser, error) {
 	return nil, nil
 }
 func (s *Storage) GetUserSubs(
@@ -17,7 +16,7 @@ func (s *Storage) GetUserSubs(
 	subName string,
 	startDate time.Time,
 	endDate time.Time,
-) ([]*t.SubscriptionUser, error) {
+) ([]*d.SubscriptionUser, error) {
 	return nil, nil
 }
 func (s *Storage) GetUsersForSub(
@@ -26,7 +25,7 @@ func (s *Storage) GetUsersForSub(
 	limit int64,
 	offset int64,
 	startDate time.Time,
-	endDate time.Time) ([]*t.SubscriptionUser, error) {
+	endDate time.Time) ([]*d.SubscriptionUser, error) {
 	return nil, nil
 }
 func (s *Storage) GetSubsForUser(
@@ -37,6 +36,6 @@ func (s *Storage) GetSubsForUser(
 	subName string,
 	startDate time.Time,
 	endDate time.Time,
-) ([]*t.SubscriptionUser, error) {
+) ([]*d.SubscriptionUser, error) {
 	return nil, nil
 }

@@ -1,7 +1,6 @@
 package service
 
 import (
-	t "SubscriberService/api/generated"
 	d "SubscriberService/internal/domains"
 	"context"
 	"log/slog"
@@ -18,7 +17,7 @@ type SubscriptionProvider interface {
 }
 
 type SubscriptionUserProvider interface {
-	SaveUserSub(ctx context.Context, userSub *t.SubscriptionUserCreate) (*t.SubscriptionUser, error)
+	SaveUserSub(ctx context.Context, userSub *d.SubscriptionUserCreate) (*d.SubscriptionUser, error)
 	GetUserSubs(
 		ctx context.Context,
 		limit int64,
@@ -26,14 +25,14 @@ type SubscriptionUserProvider interface {
 		subName string,
 		startDate time.Time,
 		endDate time.Time,
-	) ([]*t.SubscriptionUser, error)
+	) ([]*d.SubscriptionUser, error)
 	GetUsersForSub(
 		ctx context.Context,
 		subId int64,
 		limit int64,
 		offset int64,
 		startDate time.Time,
-		endDate time.Time) ([]*t.SubscriptionUser, error)
+		endDate time.Time) ([]*d.SubscriptionUser, error)
 	GetSubsForUser(
 		ctx context.Context,
 		userid string,
@@ -42,14 +41,14 @@ type SubscriptionUserProvider interface {
 		subName string,
 		startDate time.Time,
 		endDate time.Time,
-	) ([]*t.SubscriptionUser, error)
+	) ([]*d.SubscriptionUser, error)
 }
 
 type SubscriptionIdUserIdProvider interface {
-	GetUserSubById(ctx context.Context, userId string, subId int64) (*t.SubscriptionUser, error)
-	UpdateUserSub(ctx context.Context, userId string, subId int64, userSub *t.SubscriptionUserCreate) (*t.SubscriptionUser, error)
+	GetUserSubById(ctx context.Context, userId string, subId int64) (*d.SubscriptionUser, error)
+	UpdateUserSub(ctx context.Context, userId string, subId int64, userSub *d.SubscriptionUserCreate) (*d.SubscriptionUser, error)
 	DeleteUserSub(ctx context.Context, userId string, subId int64) error
-	GetUserTotal(ctx context.Context, userId string, startDate *time.Time, endDate time.Time) (*t.SubSum, error)
+	GetUserTotal(ctx context.Context, userId string, startDate time.Time, endDate time.Time) (*d.SubSum, error)
 }
 
 type SubService struct {
