@@ -2,16 +2,18 @@ package service
 
 import (
 	t "SubscriberService/api/generated"
+	d "SubscriberService/internal/domains"
 	"context"
 	"log/slog"
 	"time"
 )
 
 type SubscriptionProvider interface {
-	SaveSub(ctx context.Context, sub *t.Subscription) (*t.Subscription, error)
-	GetSubs(ctx context.Context, limit int64, offset int64, subName string) ([]*t.Subscription, error)
-	GetSubById(ctx context.Context, subId int64) (*t.Subscription, error)
-	UpdateSub(ctx context.Context, sub *t.Subscription) (*t.Subscription, error)
+	SaveSub(ctx context.Context, sub *d.Subscription) (*d.Subscription, error)
+	GetSubs(ctx context.Context, limit int64, offset int64) ([]*d.Subscription, error)
+	GetSubsName(ctx context.Context, limit int64, offset int64, subName string) ([]*d.Subscription, error)
+	GetSubById(ctx context.Context, subId int64) (*d.Subscription, error)
+	UpdateSub(ctx context.Context, sub *d.Subscription) (*d.Subscription, error)
 	DeleteSub(ctx context.Context, subId int64) error
 }
 
