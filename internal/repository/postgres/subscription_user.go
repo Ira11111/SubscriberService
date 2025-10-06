@@ -7,11 +7,11 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func (s *Storage) SaveUserSub(ctx *chi.Context, userSub *t.SubscriptionUserCreate) (*t.SubscriptionUser, error) {
+func (s *Storage) SaveUserSub(ctx context.Context, userSub *t.SubscriptionUserCreate) (*t.SubscriptionUser, error) {
 	return nil, nil
 }
 func (s *Storage) GetUserSubs(
-	ctx *chi.Context,
+	ctx context.Context,
 	limit int64,
 	offset int64,
 	subName string,
@@ -21,7 +21,7 @@ func (s *Storage) GetUserSubs(
 	return nil, nil
 }
 func (s *Storage) GetUsersForSub(
-	ctx *chi.Context,
+	ctx context.Context,
 	subId int64,
 	limit int64,
 	offset int64,
@@ -30,7 +30,7 @@ func (s *Storage) GetUsersForSub(
 	return nil, nil
 }
 func (s *Storage) GetSubsForUser(
-	ctx *chi.Context,
+	ctx context.Context,
 	userid string,
 	limit int64,
 	offset int64,

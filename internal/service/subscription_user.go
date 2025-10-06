@@ -2,16 +2,15 @@ package service
 
 import (
 	t "SubscriberService/api/generated"
-
-	"github.com/go-chi/chi/v5"
+	"context"
 )
 
-func (s *SubService) SaveUserSub(ctx *chi.Context, userSub *t.SubscriptionUserCreate) (*t.SubscriptionUser, error) {
+func (s *SubService) SaveUserSub(ctx context.Context, userSub *t.SubscriptionUserCreate) (*t.SubscriptionUser, error) {
 	return nil, nil
 
 }
 func (s *SubService) GetUserSubs(
-	ctx *chi.Context,
+	ctx context.Context,
 	limit *t.LimitParam,
 	offset *t.OffsetParam,
 	subName *t.SubNameParam,
@@ -22,7 +21,7 @@ func (s *SubService) GetUserSubs(
 
 }
 func (s *SubService) GetUsersForSub(
-	ctx *chi.Context,
+	ctx context.Context,
 	subId *t.IdSubParam,
 	limit *t.LimitParam,
 	offset *t.OffsetParam,
@@ -32,7 +31,7 @@ func (s *SubService) GetUsersForSub(
 
 }
 func (s *SubService) GetSubsForUser(
-	ctx *chi.Context,
+	ctx context.Context,
 	userid *t.IdUserParam,
 	limit *t.LimitParam,
 	offset *t.OffsetParam,
