@@ -11,7 +11,7 @@ import (
 	"github.com/oapi-codegen/runtime"
 )
 
-// ServerInterface represents all server handler.
+// ServerInterface represents all server handlers.
 type ServerInterface interface {
 	// Subscription list
 	// (GET /subscriptions)

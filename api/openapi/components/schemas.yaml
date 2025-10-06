@@ -3,7 +3,7 @@ schemas:
     type: object
     properties:
       sub_id:
-        type: number
+        type: integer
         nullable: true
       service_name:
         type: string
