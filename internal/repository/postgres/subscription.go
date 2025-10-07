@@ -53,9 +53,29 @@ func (s *Storage) GetSubsName(ctx context.Context, limit int64, offset int64, su
 }
 
 func (s *Storage) GetSubById(ctx context.Context, subId int64) (*d.Subscription, error) {
-	return nil, nil
+	var sub d.Subscription
+	query := `SELECT * FROM subscription WHERE id = $1`
+	err := sqlx.GetContext(ctx, s.db, &sub, query, subId)
+	if err != nil {
+		return nil, err
+	}
+	return &sub, nil
 }
 func (s *Storage) UpdateSub(ctx context.Context, sub *d.Subscription) (*d.Subscription, error) {
-	return nil, nil
+	var updatedSub d.Subscription
+	query := `UPDATE subscription SET id = :id, name = :name, price = :price 
+                    WHERE id = :id RETURNING id, name, price`
+
+	rows, err := sqlx.NamedQueryContext(ctx, s.db, query, sub)
+	if rows.Next() {
+		if err = rows.Scan(&updatedSub.Id, &updatedSub.ServiceName, &updatedSub.Price); err != nil {
+			return nil, fmt.Errorf("scan created subscription: %w", err)
+		}
+	}
+	return &updatedSub, nil
 }
-func (s *Storage) DeleteSub(ctx context.Context, subId int64) error { return nil }
+func (s *Storage) DeleteSub(ctx context.Context, subId int64) error {
+	query := `DELETE FROM subscription WHERE id = $1`
+	_, err := s.db.ExecContext(ctx, query, subId)
+	return err
+}

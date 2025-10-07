@@ -8,20 +8,18 @@ import (
 )
 
 func ToAPISubscription(domainSub *domains.Subscription) *generated.Subscription {
-	subID := int(domainSub.Id)
 	return &generated.Subscription{
 		Price:       domainSub.Price,
 		ServiceName: domainSub.ServiceName,
-		SubId:       &subID,
+		SubId:       &domainSub.Id,
 	}
 }
 
 func ToAPISubscriptionUser(domainUser *domains.SubscriptionUser) *generated.SubscriptionUser {
-	subID := int(domainUser.SubId)
 	return &generated.SubscriptionUser{
 		Price:       domainUser.Price,
 		ServiceName: domainUser.ServiceName,
-		SubId:       &subID,
+		SubId:       &domainUser.SubId,
 	}
 }
 

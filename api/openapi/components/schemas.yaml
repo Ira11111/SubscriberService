@@ -4,6 +4,7 @@ schemas:
     properties:
       sub_id:
         type: integer
+        format: int64
         nullable: true
       service_name:
         type: string
