@@ -9,7 +9,7 @@ import (
 	"errors"
 )
 
-func (s *SubService) SaveUserSub(ctx context.Context, userSub *t.SubscriptionUserCreate) (*t.SubscriptionUser, error) {
+func (s *SubService) SaveUserSub(ctx context.Context, userSub *t.SubscriptionUserCreate) (*t.SubscriptionUserCreate, error) {
 	const op = "service.subscription_user.SaveUserSub"
 	logger := s.logger.With("op", op)
 
@@ -31,7 +31,7 @@ func (s *SubService) SaveUserSub(ctx context.Context, userSub *t.SubscriptionUse
 		return nil, err
 	}
 	logger.Debug("Convert domain type into api type")
-	newSub := converter.ToAPISubscriptionUser(res)
+	newSub := converter.ToAPISubscriptionUserCreate(res)
 
 	logger.Info("subscription saved successful")
 	return newSub, nil
@@ -50,11 +50,12 @@ func (s *SubService) GetUserSubs(
 
 	logger.Debug("parsing pagination params")
 	lim, off := parsePagination(limit, offset)
+	st, end := parseDate(startDate, endDate)
 
 	f := filter.NewFilterBuilder().
 		WithPagination(lim, off).
 		WithSubName(subName).
-		WithDateRange(startDate.Time, endDate.Time).
+		WithDateRange(st, end).
 		Build()
 
 	userSubs, err := s.subUserProvider.GetUserSubs(ctx, &f)
@@ -118,6 +119,7 @@ func (s *SubService) GetSubsForUser(
 	startDate *t.StartDateParam,
 	endDate *t.EndDateParam,
 ) ([]*t.SubscriptionUser, error) {
+	//TODO: починить end_date
 	const op = "service.subscription_user.GetSubsForUser"
 	logger := s.logger.With("op", op)
 

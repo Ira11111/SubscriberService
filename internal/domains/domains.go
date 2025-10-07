@@ -1,6 +1,7 @@
 package domains
 
 import (
+	"database/sql"
 	"time"
 )
 
@@ -17,14 +18,16 @@ type Subscription struct {
 	Id          int64  `db:"id"`
 }
 
-// SubscriptionUser defines model for SubscriptionUser.
 type SubscriptionUser struct {
-	Price       int64  `db:"price"`
-	ServiceName string `db:"name"`
-	SubId       int64  `db:"id_sub"`
+	Id          int64        `db:"id"`
+	Price       int64        `db:"price"`
+	ServiceName string       `db:"name"`
+	SubId       int64        `db:"id_sub"`
+	UserId      string       `db:"id_user"`
+	StartDate   time.Time    `db:"start_date"`
+	EndDate     sql.NullTime `db:"end_date"`
 }
 
-// SubscriptionUserCreate defines model for SubscriptionUserCreate.
 type SubscriptionUserCreate struct {
 	StartDate time.Time `db:"start_date"`
 	SubId     int64     `db:"id_sub"`

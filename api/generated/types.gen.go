@@ -31,15 +31,18 @@ type Subscription struct {
 
 // SubscriptionUser defines model for SubscriptionUser.
 type SubscriptionUser struct {
-	Price       int64  `json:"price"`
-	ServiceName string `json:"service_name"`
-	SubId       *int64 `json:"sub_id"`
+	EndDate     *openapi_types.Date `json:"end_date,omitempty"`
+	Price       int64               `json:"price"`
+	ServiceName string              `json:"service_name"`
+	StartDate   openapi_types.Date  `json:"start_date"`
+	SubId       *int64              `json:"sub_id"`
+	UserId      string              `json:"user_id"`
 }
 
 // SubscriptionUserCreate defines model for SubscriptionUserCreate.
 type SubscriptionUserCreate struct {
 	StartDate openapi_types.Date `json:"start_date"`
-	SubId     float32            `json:"sub_id"`
+	SubId     int64              `json:"sub_id"`
 	UserId    string             `json:"user_id"`
 }
 

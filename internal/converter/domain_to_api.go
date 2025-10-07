@@ -4,7 +4,7 @@ import (
 	"SubscriberService/api/generated"
 	"SubscriberService/internal/domains"
 
-	openapi_types "github.com/oapi-codegen/runtime/types"
+	"github.com/oapi-codegen/runtime/types"
 )
 
 func ToAPISubscription(domainSub *domains.Subscription) *generated.Subscription {
@@ -16,19 +16,35 @@ func ToAPISubscription(domainSub *domains.Subscription) *generated.Subscription 
 }
 
 func ToAPISubscriptionUser(domainUser *domains.SubscriptionUser) *generated.SubscriptionUser {
+	var endDate types.Date
+	if domainUser.EndDate.Valid {
+		endDate = types.Date{Time: domainUser.EndDate.Time}
+	}
 	return &generated.SubscriptionUser{
 		Price:       domainUser.Price,
 		ServiceName: domainUser.ServiceName,
+		UserId:      domainUser.UserId,
+		StartDate:   types.Date{domainUser.StartDate},
+		EndDate:     &endDate,
 		SubId:       &domainUser.SubId,
 	}
+
 }
 
+func ToAPISubscriptionUserCreate(domainUser *domains.SubscriptionUserCreate) *generated.SubscriptionUserCreate {
+	return &generated.SubscriptionUserCreate{
+		UserId:    domainUser.UserId,
+		StartDate: types.Date{domainUser.StartDate},
+		SubId:     domainUser.SubId,
+	}
+
+}
 func ToAPISubSum(domainSum *domains.SubSum) *generated.SubSum {
 	return &generated.SubSum{
 		UserId:    &domainSum.UserId,
 		TotalSum:  &domainSum.TotalSum,
-		StartDate: &openapi_types.Date{domainSum.StartDate},
-		EndDate:   &openapi_types.Date{domainSum.EndDate},
+		StartDate: &types.Date{domainSum.StartDate},
+		EndDate:   &types.Date{domainSum.EndDate},
 	}
 }
 
@@ -44,6 +60,14 @@ func ToAPISubscriptionUserSlice(domainUsers []domains.SubscriptionUser) []*gener
 	apiUsers := make([]*generated.SubscriptionUser, len(domainUsers))
 	for i, domainUser := range domainUsers {
 		apiUsers[i] = ToAPISubscriptionUser(&domainUser)
+	}
+	return apiUsers
+}
+
+func ToAPISubscriptionUserCreateSlice(domainUsers []domains.SubscriptionUserCreate) []*generated.SubscriptionUserCreate {
+	apiUsers := make([]*generated.SubscriptionUserCreate, len(domainUsers))
+	for i, domainUser := range domainUsers {
+		apiUsers[i] = ToAPISubscriptionUserCreate(&domainUser)
 	}
 	return apiUsers
 }

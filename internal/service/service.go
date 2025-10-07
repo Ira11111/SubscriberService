@@ -1,11 +1,13 @@
 package service
 
 import (
+	t "SubscriberService/api/generated"
 	d "SubscriberService/internal/domains"
 	"SubscriberService/internal/filter"
 	"context"
 	"errors"
 	"log/slog"
+	"time"
 )
 
 const (
@@ -29,7 +31,7 @@ type SubscriptionProvider interface {
 }
 
 type SubscriptionUserProvider interface {
-	SaveUserSub(ctx context.Context, userSub *d.SubscriptionUserCreate) (*d.SubscriptionUser, error)
+	SaveUserSub(ctx context.Context, userSub *d.SubscriptionUserCreate) (*d.SubscriptionUserCreate, error)
 	GetUserSubs(ctx context.Context, options *filter.FilterOptions) ([]d.SubscriptionUser, error)
 }
 
@@ -76,4 +78,17 @@ func parsePagination(limit *int64, offset *int64) (int64, int64) {
 		off = offsetDefault
 	}
 	return l, off
+}
+
+func parseDate(startDate *t.StartDateParam, endDate *t.EndDateParam) (time.Time, time.Time) {
+	var startTime, endTime time.Time
+
+	if startDate != nil {
+		startTime = startDate.Time
+	}
+
+	if endDate != nil {
+		endTime = endDate.Time
+	}
+	return startTime, endTime
 }

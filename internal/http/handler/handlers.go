@@ -26,7 +26,7 @@ Paths:
 /subscriptions/users/id
 */
 type SubscriptionUserService interface {
-	SaveUserSub(ctx context.Context, userSub *api.SubscriptionUserCreate) (*api.SubscriptionUser, error)
+	SaveUserSub(ctx context.Context, userSub *api.SubscriptionUserCreate) (*api.SubscriptionUserCreate, error)
 	GetUserSubs(
 		ctx context.Context,
 		limit *api.LimitParam,
