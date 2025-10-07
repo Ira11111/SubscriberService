@@ -3,6 +3,7 @@ package service
 import (
 	d "SubscriberService/internal/domains"
 	"context"
+	"errors"
 	"log/slog"
 	"time"
 )
@@ -10,6 +11,12 @@ import (
 const (
 	limitDefault  = 20
 	offsetDefault = 0
+)
+
+var (
+	ErrNotfound              = errors.New("Not found")
+	ErrOperationFailed       = errors.New("Operation failed")
+	ErrFailedGetResponseData = errors.New("Failed to get response data")
 )
 
 type SubscriptionProvider interface {

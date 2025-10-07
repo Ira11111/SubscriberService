@@ -2,7 +2,9 @@ package handler
 
 import (
 	api "SubscriberService/api/generated"
+	"SubscriberService/internal/service"
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 )
@@ -16,9 +18,15 @@ func (h *Handler) GetSubscriptions(w http.ResponseWriter, r *http.Request, param
 	logger.Debug("Getting subscriptions")
 	subs, err := h.subService.GetSubs(ctx, limit, offset, subName)
 	if err != nil {
-		logger.Error("Failed to get subscriptions")
+		if errors.Is(err, service.ErrNotfound) {
+			logger.Info("no such subs")
+			http.Error(w, "data not fount", http.StatusNotFound)
+			return
+		}
+		if errors.Is(err, service.ErrOperationFailed) {
+			logger.Error("Failed to get subscriptions")
+		}
 		http.Error(w, "Failed to get subscriptions", http.StatusInternalServerError)
-		// определяем тип ошибки
 		return
 	}
 
@@ -59,12 +67,23 @@ func (h *Handler) PostSubscriptions(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	logger.Debug("Saving subscription")
 	createdSub, err := h.subService.SaveSub(ctx, &sub)
+
 	if err != nil {
-		// определить тип ошибки
-		logger.Error("Failed to save new Sub")
-		http.Error(w, "Subscription not saved", http.StatusInternalServerError)
+		if errors.Is(err, service.ErrOperationFailed) {
+			logger.Error("Failed to save new Sub")
+			http.Error(w, "Subscription not saved", http.StatusInternalServerError)
+			return
+		}
+		if errors.Is(err, service.ErrFailedGetResponseData) {
+			logger.Warn("Failed to get response data")
+			http.Error(w, "Failed to get response data", http.StatusInternalServerError)
+			return
+		}
+		logger.Debug(err.Error())
+		http.Error(w, "Internal error", http.StatusInternalServerError)
 		return
 	}
+
 	logger.Info("Subscription is saved")
 	logger.Debug("Marshaling JSON")
 	responseJSON, err := json.Marshal(createdSub)
@@ -87,7 +106,16 @@ func (h *Handler) DeleteSubscriptionsSubId(w http.ResponseWriter, r *http.Reques
 	err := h.subService.DeleteSub(ctx, subId)
 	if err != nil {
 		logger.Error("Failed to delete sub")
-		http.Error(w, "Failed to delete sub", http.StatusInternalServerError)
+		if errors.Is(err, service.ErrOperationFailed) {
+			http.Error(w, "Failed to delete sub", http.StatusInternalServerError)
+			return
+		}
+		if errors.Is(err, service.ErrNotfound) {
+			http.Error(w, "No such sub", http.StatusNotFound)
+			return
+		}
+		logger.Debug(err.Error())
+		http.Error(w, "Internal error", http.StatusInternalServerError)
 		return
 	}
 	w.WriteHeader(http.StatusNoContent)
@@ -100,10 +128,18 @@ func (h *Handler) GetSubscriptionsSubId(w http.ResponseWriter, r *http.Request, 
 	logger.Debug("Trying to get subscription")
 	sub, err := h.subService.GetSubById(ctx, subId)
 	if err != nil {
-		logger.Error("Failed to find subscription")
-		http.Error(w, "Failed to find subscription", http.StatusInternalServerError)
+		if errors.Is(err, service.ErrOperationFailed) {
+			logger.Error("Failed to find subscription")
+			http.Error(w, "Failed to find subscription", http.StatusInternalServerError)
+			return
+		}
+		if errors.Is(err, service.ErrNotfound) {
+			http.Error(w, "No such sub", http.StatusNotFound)
+			return
+		}
+		logger.Debug(err.Error())
+		http.Error(w, "Internal error", http.StatusInternalServerError)
 		return
-		// определить тип ошибки
 	}
 
 	logger.Info("Subscription found")
@@ -122,6 +158,7 @@ func (h *Handler) GetSubscriptionsSubId(w http.ResponseWriter, r *http.Request, 
 }
 
 func (h *Handler) PutSubscriptionsSubId(w http.ResponseWriter, r *http.Request, subId api.IdSubParam) {
+	//TODO: поменять типы для subscription и subscriptionCreate + настроить валидацию полей
 	const op = "service.subscription.PutSubscriptionsSubId"
 	logger := h.logger.With("op", op)
 
@@ -146,9 +183,17 @@ func (h *Handler) PutSubscriptionsSubId(w http.ResponseWriter, r *http.Request, 
 	logger.Debug("Updating subscription")
 	createdSub, err := h.subService.UpdateSub(ctx, &sub, subId)
 	if err != nil {
-		// определить тип ошибки
-		logger.Error("Failed to update Sub")
-		http.Error(w, "Subscription not updated", http.StatusInternalServerError)
+		if errors.Is(err, service.ErrOperationFailed) {
+			logger.Error("Failed to update subscription")
+			http.Error(w, "Failed to update subscription", http.StatusInternalServerError)
+			return
+		}
+		if errors.Is(err, service.ErrNotfound) {
+			http.Error(w, "No such sub", http.StatusNotFound)
+			return
+		}
+		logger.Debug(err.Error())
+		http.Error(w, "Internal error", http.StatusInternalServerError)
 		return
 	}
 	logger.Info("Subscription is updated")
@@ -163,5 +208,4 @@ func (h *Handler) PutSubscriptionsSubId(w http.ResponseWriter, r *http.Request, 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	w.Write(responseJSON)
-
 }
