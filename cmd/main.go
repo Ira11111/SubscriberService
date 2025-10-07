@@ -5,6 +5,7 @@ import (
 	"SubscriberService/internal/config"
 	l "SubscriberService/internal/logger"
 	"context"
+	"fmt"
 	"log/slog"
 	"os"
 	"os/signal"
@@ -17,6 +18,7 @@ func main() {
 	logger := l.InitLogger(cfg.Env)
 	logger.Debug("Init logger")
 
+	fmt.Println(cfg)
 	application := app.NewApp(cfg, logger)
 	logger.Debug("Init application")
 

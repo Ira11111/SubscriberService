@@ -1,4 +1,4 @@
-FROM node:18-alpine AS builder
+FROM node:18-alpine AS spec-builder
 RUN npm install -g swagger-cli
 COPY api/openapi/spec.yaml /api/spec.yaml
 COPY api/openapi/paths/ /api/paths/
@@ -6,5 +6,11 @@ COPY api/openapi/components/ /api/components/
 RUN npx swagger-cli validate api/spec.yaml
 RUN swagger-cli bundle /api/spec.yaml -o /api/bundle.yaml --type yaml
 
-FROM swaggerapi/swagger-ui
-COPY --from=builder /api/bundle.yaml /api/bundle.yaml
+FROM nginx:alpine
+COPY --from=swaggerapi/swagger-ui /usr/share/nginx/html /usr/share/nginx/html
+COPY --from=spec-builder /api/bundle.yaml /usr/share/nginx/html/bundle.yaml
+
+COPY nginx.conf /etc/nginx/nginx.conf
+
+RUN sed -i 's|url: "https://petstore.swagger.io/v2/swagger.json"|url: "/bundle.yaml"|g' /usr/share/nginx/html/swagger-initializer.js
+RUN chown -R nginx:nginx /usr/share/nginx/html

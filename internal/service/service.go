@@ -7,10 +7,15 @@ import (
 	"time"
 )
 
+const (
+	limitDefault  = 20
+	offsetDefault = 0
+)
+
 type SubscriptionProvider interface {
 	SaveSub(ctx context.Context, sub *d.Subscription) (*d.Subscription, error)
-	GetSubs(ctx context.Context, limit int64, offset int64) ([]*d.Subscription, error)
-	GetSubsName(ctx context.Context, limit int64, offset int64, subName string) ([]*d.Subscription, error)
+	GetSubs(ctx context.Context, limit int64, offset int64) ([]d.Subscription, error)
+	GetSubsName(ctx context.Context, limit int64, offset int64, subName string) ([]d.Subscription, error)
 	GetSubById(ctx context.Context, subId int64) (*d.Subscription, error)
 	UpdateSub(ctx context.Context, sub *d.Subscription) (*d.Subscription, error)
 	DeleteSub(ctx context.Context, subId int64) error
@@ -70,4 +75,21 @@ func NewSubService(
 		subUserProvider:     subUserProvider,
 		subIdUserIdProvider: subIdUserIdProvider,
 	}
+}
+
+func parsePagination(limit *int64, offset *int64) (int64, int64) {
+	var l, off int64
+
+	if limit != nil {
+		l = *limit
+	} else {
+		l = limitDefault
+	}
+
+	if offset != nil {
+		off = *offset
+	} else {
+		off = offsetDefault
+	}
+	return l, off
 }

@@ -8,17 +8,25 @@ import (
 )
 
 func (s *SubService) SaveSub(ctx context.Context, sub *t.Subscription) (*t.Subscription, error) {
-	return nil, nil
+	domainSub := converter.ToDomainSubscription(sub)
+	res, err := s.subProvider.SaveSub(ctx, domainSub)
+	if err != nil {
+		return nil, err
+	}
+
+	newSub := converter.ToAPISubscription(res)
+	return newSub, nil
 }
-func (s *SubService) GetSubs(ctx context.Context, limit t.LimitParam, offset t.OffsetParam, subName t.SubNameParam) ([]*t.Subscription, error) {
-	var subs []*d.Subscription
+func (s *SubService) GetSubs(ctx context.Context, limit *t.LimitParam, offset *t.OffsetParam, subName *t.SubNameParam) ([]*t.Subscription, error) {
+	var subs []d.Subscription
 	var err error
-	if subName != "" {
+	lim, off := parsePagination(limit, offset)
+	if subName != nil {
 		s.logger.Debug("SubName is not empty, use GetSubsName")
-		subs, err = s.subProvider.GetSubsName(ctx, limit, offset, subName)
+		subs, err = s.subProvider.GetSubsName(ctx, lim, off, *subName)
 	} else {
 		s.logger.Debug("SubName is empty, use GetSubs")
-		subs, err = s.subProvider.GetSubs(ctx, limit, offset)
+		subs, err = s.subProvider.GetSubs(ctx, lim, off)
 	}
 
 	if err != nil {

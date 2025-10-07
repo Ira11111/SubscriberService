@@ -14,7 +14,7 @@ type SubSum struct {
 type Subscription struct {
 	Price       int64  `db:"price"`
 	ServiceName string `db:"name"`
-	SubId       int64  `json:"id_sub"`
+	Id          int64  `db:"id"`
 }
 
 // SubscriptionUser defines model for SubscriptionUser.

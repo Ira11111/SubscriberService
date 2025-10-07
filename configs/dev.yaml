@@ -9,7 +9,7 @@ db:
 
 server:
   # Основные настройки
-  address: ":8080"
+  port: 8080
   read_timeout: "15s"
   write_timeout: "15s"
   idle_timeout: "30s"

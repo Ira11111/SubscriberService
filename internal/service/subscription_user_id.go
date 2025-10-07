@@ -2,8 +2,7 @@ package service
 
 import (
 	t "SubscriberService/api/generated"
-
-	"github.com/go-chi/chi/v5"
+	"context"
 )
 
 func (s *SubService) GetUserSubById(ctx context.Context, userId *t.IdUserParam, subId *t.IdSubParam) (*t.SubscriptionUser, error) {

@@ -55,10 +55,14 @@ type TimeoutConfig struct {
 }
 
 func LoadPath(path string) (string, error) {
-	if err := godotenv.Load(path); err != nil {
-		return "", err
+	cfgPath := os.Getenv(cfgVar) // пытаемся получить переменную окружения
+	if cfgPath == "" {
+		// пытаемся получить переменную окружения из файла
+		if err := godotenv.Load(path); err != nil {
+			return "", err
+		}
+		cfgPath = os.Getenv(cfgVar)
 	}
-	cfgPath := os.Getenv(cfgVar)
 	if cfgPath == "" {
 		return "", errors.New("Failed to get config path")
 	}
@@ -67,9 +71,6 @@ func LoadPath(path string) (string, error) {
 
 func MustLoadByPath(path string) *Config {
 	cfgPath, err := LoadPath(path)
-	if err != nil {
-		panic(err.Error())
-	}
 
 	var dbPass string
 	dbPass = os.Getenv("DB_PASS")

@@ -12,14 +12,26 @@ import (
 	_ "github.com/lib/pq"
 )
 
+const maxRetries = 5
+
 type Storage struct {
 	db *sqlx.DB
 }
 
 func NewStorage(cfg *config.DBConfig) (*Storage, error) {
-	db, err := sqlx.Connect("postgres",
-		fmt.Sprintf("user=%s host=%s dbname=%s password=%s sslmode=%s",
-			cfg.User, cfg.Host, cfg.Database, cfg.Password, cfg.SSLMode))
+	dsn := fmt.Sprintf("user=%s host=%s dbname=%s password=%s sslmode=%s",
+		cfg.User, cfg.Host, cfg.Database, cfg.Password, cfg.SSLMode)
+
+	db, err := sqlx.Open("postgres", dsn)
+	for i := 0; i < maxRetries; i++ {
+		if err != nil {
+			time.Sleep(2 * time.Second)
+			db, err = sqlx.Open("postgres", dsn)
+		} else {
+			break
+		}
+	}
+
 	if err != nil {
 		return nil, repository.ErrFailedConnect
 	}

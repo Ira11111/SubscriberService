@@ -8,7 +8,7 @@ import (
 )
 
 func ToAPISubscription(domainSub *domains.Subscription) *generated.Subscription {
-	subID := int(domainSub.SubId)
+	subID := int(domainSub.Id)
 	return &generated.Subscription{
 		Price:       domainSub.Price,
 		ServiceName: domainSub.ServiceName,
@@ -34,18 +34,18 @@ func ToAPISubSum(domainSum *domains.SubSum) *generated.SubSum {
 	}
 }
 
-func ToAPISubscriptionSlice(domainSubs []*domains.Subscription) []*generated.Subscription {
+func ToAPISubscriptionSlice(domainSubs []domains.Subscription) []*generated.Subscription {
 	apiSubs := make([]*generated.Subscription, len(domainSubs))
 	for i, domainSub := range domainSubs {
-		apiSubs[i] = ToAPISubscription(domainSub)
+		apiSubs[i] = ToAPISubscription(&domainSub)
 	}
 	return apiSubs
 }
 
-func ToAPISubscriptionUserSlice(domainUsers []*domains.SubscriptionUser) []*generated.SubscriptionUser {
+func ToAPISubscriptionUserSlice(domainUsers []domains.SubscriptionUser) []*generated.SubscriptionUser {
 	apiUsers := make([]*generated.SubscriptionUser, len(domainUsers))
 	for i, domainUser := range domainUsers {
-		apiUsers[i] = ToAPISubscriptionUser(domainUser)
+		apiUsers[i] = ToAPISubscriptionUser(&domainUser)
 	}
 	return apiUsers
 }
