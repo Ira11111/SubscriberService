@@ -9,12 +9,12 @@ import (
 	"errors"
 )
 
-func (s *SubService) SaveUserSub(ctx context.Context, userSub *t.SubscriptionUserCreate) (*t.SubscriptionUserCreate, error) {
+func (s *SubService) SaveUserSub(ctx context.Context, userSub *t.SubscriptionUser) (*t.SubscriptionUser, error) {
 	const op = "service.subscription_user.SaveUserSub"
 	logger := s.logger.With("op", op)
 
 	logger.Debug("Converting into domain type")
-	domainUserSub := converter.ToDomainSubscriptionUserCreate(userSub)
+	domainUserSub := converter.ToDomainSubscriptionUser(userSub)
 
 	logger.Debug("trying to save domain type into DB")
 	res, err := s.subUserProvider.SaveUserSub(ctx, domainUserSub)
@@ -28,10 +28,15 @@ func (s *SubService) SaveUserSub(ctx context.Context, userSub *t.SubscriptionUse
 			logger.Warn("Failed to get response data")
 			return nil, ErrFailedGetResponseData
 		}
+		if errors.Is(err, repository.ErrDataNotFoud) {
+			logger.Info("sub with such id not fount")
+			return nil, ErrNotfound
+		}
+
 		return nil, err
 	}
 	logger.Debug("Convert domain type into api type")
-	newSub := converter.ToAPISubscriptionUserCreate(res)
+	newSub := converter.ToAPISubscriptionUser(res)
 
 	logger.Info("subscription saved successful")
 	return newSub, nil
@@ -87,10 +92,11 @@ func (s *SubService) GetUsersForSub(
 	logger := s.logger.With("op", op)
 
 	lim, off := parsePagination(limit, offset)
+	end, st := parseDate(startDate, endDate)
 	f := filter.NewFilterBuilder().
 		WithPagination(lim, off).
 		WithSubID(subId).
-		WithDateRange(startDate.Time, endDate.Time).
+		WithDateRange(st, end).
 		Build()
 
 	userSubs, err := s.subUserProvider.GetUserSubs(ctx, &f)
@@ -112,7 +118,7 @@ func (s *SubService) GetUsersForSub(
 }
 func (s *SubService) GetSubsForUser(
 	ctx context.Context,
-	userId t.IdUserParam,
+	userId *t.IdUserParam,
 	limit *t.LimitParam,
 	offset *t.OffsetParam,
 	subName *t.SubNameParam,
@@ -124,11 +130,13 @@ func (s *SubService) GetSubsForUser(
 	logger := s.logger.With("op", op)
 
 	lim, off := parsePagination(limit, offset)
+	st, end := parseDate(startDate, endDate)
+
 	f := filter.NewFilterBuilder().
 		WithPagination(lim, off).
 		WithUserID(userId).
 		WithSubName(subName).
-		WithDateRange(startDate.Time, endDate.Time).
+		WithDateRange(st, end).
 		Build()
 
 	userSubs, err := s.subUserProvider.GetUserSubs(ctx, &f)

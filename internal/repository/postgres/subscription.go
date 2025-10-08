@@ -2,6 +2,7 @@ package postgres
 
 import (
 	d "SubscriberService/internal/domains"
+	"SubscriberService/internal/filter"
 	"SubscriberService/internal/repository"
 	"context"
 	"database/sql"
@@ -31,22 +32,13 @@ func (s *Storage) SaveSub(ctx context.Context, sub *d.Subscription) (*d.Subscrip
 	}
 	return &newSub, nil
 }
-func (s *Storage) GetSubs(ctx context.Context, limit int64, offset int64) ([]d.Subscription, error) {
+func (s *Storage) GetSubs(ctx context.Context, options *filter.FilterOptions) ([]d.Subscription, error) {
 	var subs []d.Subscription
 
-	query := `SELECT * FROM subscription LIMIT $1 OFFSET $2`
-	err := sqlx.SelectContext(ctx, s.db, &subs, query, limit, offset)
-	if err != nil {
-		return nil, repository.ErrFailedGet
-	}
-	return subs, nil
-}
+	query := `SELECT * FROM subscription`
 
-func (s *Storage) GetSubsName(ctx context.Context, limit int64, offset int64, subName string) ([]d.Subscription, error) {
-	var subs []d.Subscription
-	searchPattern := "%" + subName + "%"
-	query := `SELECT * FROM subscription s WHERE s.name ILIKE $1 LIMIT $2 OFFSET $3`
-	err := sqlx.SelectContext(ctx, s.db, &subs, query, searchPattern, limit, offset)
+	filteredQuery, args := filter.BuildQuery(query, options)
+	err := sqlx.SelectContext(ctx, s.db, &subs, filteredQuery, args...)
 	if err != nil {
 		return nil, repository.ErrFailedGet
 	}

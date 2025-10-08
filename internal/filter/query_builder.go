@@ -19,7 +19,7 @@ func BuildQuery(baseQuery string, filter *FilterOptions) (string, []interface{})
 	}
 
 	// Добавляем условия фильтрации
-	builder.addCondition("s.id = $%d", filter.SubID)
+	builder.addCondition("su.id_sub = $%d", filter.SubID)
 	builder.addCondition("su.id_user = $%d", filter.UserID)
 	builder.addCondition("s.name ILIKE $%d", filter.SubName)
 	builder.addCondition("su.start_date >= $%d", filter.StartDate)

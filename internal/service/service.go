@@ -23,23 +23,22 @@ var (
 
 type SubscriptionProvider interface {
 	SaveSub(ctx context.Context, sub *d.Subscription) (*d.Subscription, error)
-	GetSubs(ctx context.Context, limit int64, offset int64) ([]d.Subscription, error)
-	GetSubsName(ctx context.Context, limit int64, offset int64, subName string) ([]d.Subscription, error)
+	GetSubs(ctx context.Context, options *filter.FilterOptions) ([]d.Subscription, error)
 	GetSubById(ctx context.Context, subId int64) (*d.Subscription, error)
 	UpdateSub(ctx context.Context, sub *d.Subscription) (*d.Subscription, error)
 	DeleteSub(ctx context.Context, subId int64) error
 }
 
 type SubscriptionUserProvider interface {
-	SaveUserSub(ctx context.Context, userSub *d.SubscriptionUserCreate) (*d.SubscriptionUserCreate, error)
+	SaveUserSub(ctx context.Context, userSub *d.SubscriptionUser) (*d.SubscriptionUser, error)
 	GetUserSubs(ctx context.Context, options *filter.FilterOptions) ([]d.SubscriptionUser, error)
 }
 
 type SubscriptionIdUserIdProvider interface {
-	GetUserSubById(ctx context.Context, userId string, subId int64) (*d.SubscriptionUser, error)
-	UpdateUserSub(ctx context.Context, userId string, subId int64, userSub *d.SubscriptionUserCreate) (*d.SubscriptionUser, error)
-	DeleteUserSub(ctx context.Context, userId string, subId int64) error
-	GetUserTotal(ctx context.Context, userId string, options *filter.FilterOptions) (*d.SubSum, error)
+	GetUserSubById(ctx context.Context, options *filter.FilterOptions) (*d.SubscriptionUser, error)
+	UpdateUserSub(ctx context.Context, options *filter.FilterOptions, userSub *d.SubscriptionUser) (*d.SubscriptionUser, error)
+	DeleteUserSub(ctx context.Context, options *filter.FilterOptions) error
+	GetUserTotal(ctx context.Context, options *filter.FilterOptions) (int64, error)
 }
 
 type SubService struct {

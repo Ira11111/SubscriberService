@@ -35,15 +35,8 @@ type SubscriptionUser struct {
 	Price       int64               `json:"price"`
 	ServiceName string              `json:"service_name"`
 	StartDate   openapi_types.Date  `json:"start_date"`
-	SubId       *int64              `json:"sub_id"`
+	SubId       int64               `json:"sub_id"`
 	UserId      string              `json:"user_id"`
-}
-
-// SubscriptionUserCreate defines model for SubscriptionUserCreate.
-type SubscriptionUserCreate struct {
-	StartDate openapi_types.Date `json:"start_date"`
-	SubId     int64              `json:"sub_id"`
-	UserId    string             `json:"user_id"`
 }
 
 // EndDateParam defines model for EndDateParam.
@@ -134,10 +127,10 @@ type GetSubscriptionsSubIdUsersParams struct {
 type PostSubscriptionsJSONRequestBody = Subscription
 
 // PostSubscriptionsUsersJSONRequestBody defines body for PostSubscriptionsUsers for application/json ContentType.
-type PostSubscriptionsUsersJSONRequestBody = SubscriptionUserCreate
+type PostSubscriptionsUsersJSONRequestBody = SubscriptionUser
 
 // PutSubscriptionsSubIdJSONRequestBody defines body for PutSubscriptionsSubId for application/json ContentType.
 type PutSubscriptionsSubIdJSONRequestBody = Subscription
 
 // PutSubscriptionsSubIdUsersUserIdJSONRequestBody defines body for PutSubscriptionsSubIdUsersUserId for application/json ContentType.
-type PutSubscriptionsSubIdUsersUserIdJSONRequestBody = SubscriptionUserCreate
+type PutSubscriptionsSubIdUsersUserIdJSONRequestBody = SubscriptionUser

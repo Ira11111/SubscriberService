@@ -23,7 +23,7 @@ post:
     content:
       application/json:
         schema:
-          $ref: "./../components/schemas.yaml#/schemas/SubscriptionUserCreate"
+          $ref: "./../components/schemas.yaml#/schemas/SubscriptionUser"
   responses:
     400:
       $ref: "./../components/responses.yaml#/responses/BadRequest"
@@ -32,4 +32,4 @@ post:
       content:
         application/json:
           schema:
-            $ref: "./../components/schemas.yaml#/schemas/SubscriptionUserCreate"
+            $ref: "./../components/schemas.yaml#/schemas/SubscriptionUser"

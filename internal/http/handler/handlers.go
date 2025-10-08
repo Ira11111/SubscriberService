@@ -26,7 +26,7 @@ Paths:
 /subscriptions/users/id
 */
 type SubscriptionUserService interface {
-	SaveUserSub(ctx context.Context, userSub *api.SubscriptionUserCreate) (*api.SubscriptionUserCreate, error)
+	SaveUserSub(ctx context.Context, userSub *api.SubscriptionUser) (*api.SubscriptionUser, error)
 	GetUserSubs(
 		ctx context.Context,
 		limit *api.LimitParam,
@@ -44,7 +44,7 @@ type SubscriptionUserService interface {
 		endDate *api.EndDateParam) ([]*api.SubscriptionUser, error)
 	GetSubsForUser(
 		ctx context.Context,
-		userId api.IdUserParam,
+		userId *api.IdUserParam,
 		limit *api.LimitParam,
 		offset *api.OffsetParam,
 		subName *api.SubNameParam,
@@ -58,10 +58,10 @@ Paths:
 /subscription/id/users/id
 */
 type SubscriptionIdUserIdService interface {
-	GetUserSubById(ctx context.Context, userId api.IdUserParam, subId api.IdSubParam) (*api.SubscriptionUser, error)
-	UpdateUserSub(ctx context.Context, userId api.IdUserParam, subId api.IdSubParam, userSub *api.SubscriptionUserCreate) (*api.SubscriptionUser, error)
-	DeleteUserSub(ctx context.Context, userId api.IdUserParam, subId api.IdSubParam) error
-	GetUserTotal(ctx context.Context, userId api.IdUserParam, startDate *api.StartDateParam, endDate *api.EndDateParam) (*api.SubSum, error)
+	GetUserSubById(ctx context.Context, userId *api.IdUserParam, subId api.IdSubParam) (*api.SubscriptionUser, error)
+	UpdateUserSub(ctx context.Context, userId *api.IdUserParam, subId api.IdSubParam, userSub *api.SubscriptionUser) (*api.SubscriptionUser, error)
+	DeleteUserSub(ctx context.Context, userId *api.IdUserParam, subId api.IdSubParam) error
+	GetUserTotal(ctx context.Context, userId *api.IdUserParam, startDate *api.StartDateParam, endDate *api.EndDateParam) (*api.SubSum, error)
 }
 
 type Handler struct {

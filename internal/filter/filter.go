@@ -13,9 +13,9 @@ type FilterOptions struct {
 	Offset int64
 
 	// Основные фильтры
-	SubID   *int64
-	UserID  *string
-	SubName *string
+	SubID   int64
+	UserID  string
+	SubName string
 
 	// Фильтры по дате
 	StartDate *time.Time
@@ -43,17 +43,23 @@ func (b *FilterBuilder) WithPagination(limit, offset int64) *FilterBuilder {
 }
 
 func (b *FilterBuilder) WithSubID(subID int64) *FilterBuilder {
-	b.filter.SubID = &subID
+	b.filter.SubID = subID
 	return b
 }
 
-func (b *FilterBuilder) WithUserID(userID string) *FilterBuilder {
-	b.filter.UserID = &userID
+func (b *FilterBuilder) WithUserID(userID *string) *FilterBuilder {
+	b.filter.UserID = ""
+	if userID != nil {
+		b.filter.UserID = *userID
+	}
 	return b
 }
 
 func (b *FilterBuilder) WithSubName(subName *string) *FilterBuilder {
-	b.filter.SubName = subName
+	b.filter.SubName = ""
+	if subName != nil {
+		b.filter.SubName = *subName
+	}
 	return b
 }
 

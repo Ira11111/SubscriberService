@@ -10,7 +10,7 @@ func ToDomainSubscription(apiSub *generated.Subscription) *domains.Subscription 
 	return &domains.Subscription{
 		Price:       apiSub.Price,
 		ServiceName: apiSub.ServiceName,
-		Id:          int64(*apiSub.SubId),
+		Id:          *apiSub.SubId,
 	}
 }
 
@@ -30,14 +30,6 @@ func ToDomainSubscriptionUser(apiUser *generated.SubscriptionUser) *domains.Subs
 		UserId:      apiUser.UserId,
 		StartDate:   apiUser.StartDate.Time,
 		EndDate:     endDate,
-		SubId:       *apiUser.SubId,
-	}
-}
-
-func ToDomainSubscriptionUserCreate(apiCreate *generated.SubscriptionUserCreate) *domains.SubscriptionUserCreate {
-	return &domains.SubscriptionUserCreate{
-		SubId:     int64(apiCreate.SubId),
-		UserId:    apiCreate.UserId,
-		StartDate: apiCreate.StartDate.Time,
+		SubId:       apiUser.SubId,
 	}
 }

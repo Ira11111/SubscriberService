@@ -4,6 +4,7 @@ import (
 	t "SubscriberService/api/generated"
 	"SubscriberService/internal/converter"
 	d "SubscriberService/internal/domains"
+	"SubscriberService/internal/filter"
 	"SubscriberService/internal/repository"
 	"context"
 	"errors"
@@ -45,13 +46,10 @@ func (s *SubService) GetSubs(ctx context.Context, limit *t.LimitParam, offset *t
 
 	logger.Debug("parsing pagination params")
 	lim, off := parsePagination(limit, offset)
-	if subName != nil {
-		logger.Debug("SubName is not empty, use GetSubsName")
-		subs, err = s.subProvider.GetSubsName(ctx, lim, off, *subName)
-	} else {
-		logger.Debug("SubName is empty, use GetSubs")
-		subs, err = s.subProvider.GetSubs(ctx, lim, off)
-	}
+	f := filter.NewFilterBuilder().WithPagination(lim, off).WithSubName(subName).Build()
+
+	logger.Debug("trying to get subs")
+	subs, err = s.subProvider.GetSubs(ctx, &f)
 
 	if err != nil {
 		logger.Error("Failed to get subscriptions")

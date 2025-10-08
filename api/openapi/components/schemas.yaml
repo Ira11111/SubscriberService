@@ -20,6 +20,9 @@ schemas:
       - $ref: "#/schemas/Subscription"
       - type: object
         properties:
+          sub_id:
+            type: integer
+            format: int64
           user_id:
             type: string
           start_date:
@@ -29,24 +32,9 @@ schemas:
             type: string
             format: date
         required:
+          - sub_id
           - user_id
           - start_date
-
-  SubscriptionUserCreate:
-    type: object
-    properties:
-      sub_id:
-        type: integer
-        format: int64
-      user_id:
-        type: string
-      start_date:
-        type: string
-        format: date
-    required:
-      - sub_id
-      - user_id
-      - start_date
 
   SubSum:
     type: object
