@@ -15,11 +15,12 @@ schemas:
     allOf:
       - $ref: "#/schemas/SubscriptionCreate"
       - type: object
-    properties:
-      sub_id:
-        type: integer
-        format: int64
-        nullable: true
+        properties:
+          sub_id:
+            type: integer
+            format: int64
+        required:
+          - sub_id
     required:
       - sub_id
       - service_name
@@ -55,12 +56,15 @@ schemas:
             type: integer
             format: int64
         required:
-          - sub_id
-          - user_id
           - service_name
           - price
-          - start_date
-          - end_date
+    required:
+      - sub_id
+      - user_id
+      - service_name
+      - price
+      - start_date
+      - end_date
 
   SubSum:
     type: object
