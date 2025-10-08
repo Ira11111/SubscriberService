@@ -35,9 +35,10 @@ func (s *Storage) SaveSub(ctx context.Context, sub *d.Subscription) (*d.Subscrip
 func (s *Storage) GetSubs(ctx context.Context, options *filter.FilterOptions) ([]d.Subscription, error) {
 	var subs []d.Subscription
 
-	query := `SELECT * FROM subscription`
+	query := `SELECT s.id, s.name, s.price FROM subscription s`
 
 	filteredQuery, args := filter.BuildQuery(query, options)
+
 	err := sqlx.SelectContext(ctx, s.db, &subs, filteredQuery, args...)
 	if err != nil {
 		return nil, repository.ErrFailedGet
@@ -47,7 +48,7 @@ func (s *Storage) GetSubs(ctx context.Context, options *filter.FilterOptions) ([
 
 func (s *Storage) GetSubById(ctx context.Context, subId int64) (*d.Subscription, error) {
 	var sub d.Subscription
-	query := `SELECT * FROM subscription WHERE id = $1`
+	query := `SELECT * FROM subscription s WHERE id = $1`
 	err := sqlx.GetContext(ctx, s.db, &sub, query, subId)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -77,7 +78,7 @@ func (s *Storage) UpdateSub(ctx context.Context, sub *d.Subscription) (*d.Subscr
 }
 
 func (s *Storage) DeleteSub(ctx context.Context, subId int64) error {
-	query := `DELETE FROM subscription WHERE id = $1`
+	query := `DELETE FROM subscription s WHERE id = $1`
 
 	result, err := s.db.ExecContext(ctx, query, subId)
 	if err != nil {
