@@ -21,7 +21,7 @@ put:
     content:
       application/json:
         schema:
-          $ref: "./../components/schemas.yaml#/schemas/SubscriptionUser"
+          $ref: "./../components/schemas.yaml#/schemas/SubscriptionUserCreate"
   responses:
     400:
       $ref: "./../components/responses.yaml#/responses/BadRequest"

@@ -1,11 +1,7 @@
 schemas:
-  Subscription:
+  SubscriptionCreate:
     type: object
     properties:
-      sub_id:
-        type: integer
-        format: int64
-        nullable: true
       service_name:
         type: string
       price:
@@ -15,26 +11,56 @@ schemas:
       - service_name
       - price
 
+  Subscription:
+    allOf:
+      - $ref: "#/schemas/SubscriptionCreate"
+      - type: object
+    properties:
+      sub_id:
+        type: integer
+        format: int64
+        nullable: true
+    required:
+      - sub_id
+      - service_name
+      - price
+
+  SubscriptionUserCreate:
+    type: object
+    properties:
+      sub_id:
+        type: integer
+        format: int64
+      user_id:
+        type: string
+      start_date:
+        type: string
+        format: date
+      end_date:
+        type: string
+        format: date
+    required:
+      - sub_id
+      - user_id
+      - start_date
+
   SubscriptionUser:
     allOf:
-      - $ref: "#/schemas/Subscription"
+      - $ref: "#/schemas/SubscriptionUserCreate"
       - type: object
         properties:
-          sub_id:
+          service_name:
+            type: string
+          price:
             type: integer
             format: int64
-          user_id:
-            type: string
-          start_date:
-            type: string
-            format: date
-          end_date:
-            type: string
-            format: date
         required:
           - sub_id
           - user_id
+          - service_name
+          - price
           - start_date
+          - end_date
 
   SubSum:
     type: object
