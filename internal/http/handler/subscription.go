@@ -57,7 +57,7 @@ func (h *Handler) PostSubscriptions(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	var sub api.Subscription
+	var sub api.SubscriptionCreate
 	logger.Debug("Unmarshalling JSON")
 	if err = json.Unmarshal(body, &sub); err != nil {
 		logger.Error("Parsing json error")
@@ -171,7 +171,7 @@ func (h *Handler) PutSubscriptionsSubId(w http.ResponseWriter, r *http.Request, 
 	}
 	defer r.Body.Close()
 
-	var sub api.Subscription
+	var sub api.SubscriptionCreate
 	logger.Debug("Unmarshalling JSON")
 	if err = json.Unmarshal(body, &sub); err != nil {
 		logger.Error("Parsing json error")

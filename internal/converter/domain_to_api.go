@@ -11,7 +11,7 @@ func ToAPISubscription(domainSub *domains.Subscription) *generated.Subscription 
 	return &generated.Subscription{
 		Price:       domainSub.Price,
 		ServiceName: domainSub.ServiceName,
-		SubId:       &domainSub.Id,
+		SubId:       domainSub.Id,
 	}
 }
 

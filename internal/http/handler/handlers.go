@@ -12,10 +12,10 @@ Paths:
 /subscriptions/id
 */
 type SubscriptionService interface {
-	SaveSub(ctx context.Context, sub *api.Subscription) (*api.Subscription, error)
+	SaveSub(ctx context.Context, sub *api.SubscriptionCreate) (*api.Subscription, error)
 	GetSubs(ctx context.Context, limit *api.LimitParam, offset *api.OffsetParam, subName *api.SubNameParam) ([]*api.Subscription, error)
 	GetSubById(ctx context.Context, subId api.IdSubParam) (*api.Subscription, error)
-	UpdateSub(ctx context.Context, sub *api.Subscription, subId api.IdSubParam) (*api.Subscription, error)
+	UpdateSub(ctx context.Context, sub *api.SubscriptionCreate, subId api.IdSubParam) (*api.Subscription, error)
 	DeleteSub(ctx context.Context, subId api.IdSubParam) error
 }
 

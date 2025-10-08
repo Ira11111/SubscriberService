@@ -10,12 +10,12 @@ import (
 	"errors"
 )
 
-func (s *SubService) SaveSub(ctx context.Context, sub *t.Subscription) (*t.Subscription, error) {
+func (s *SubService) SaveSub(ctx context.Context, sub *t.SubscriptionCreate) (*t.Subscription, error) {
 	const op = "service.SaveSub"
 	logger := s.logger.With("op", op)
 
 	logger.Debug("Converting api type into domain type")
-	domainSub := converter.ToDomainSubscription(sub)
+	domainSub := converter.ToDomainCreateSubscription(sub)
 
 	logger.Debug("trying to save domain type into DB")
 	res, err := s.subProvider.SaveSub(ctx, domainSub)
@@ -85,17 +85,15 @@ func (s *SubService) GetSubById(ctx context.Context, subId t.IdSubParam) (*t.Sub
 	return apiSub, nil
 
 }
-func (s *SubService) UpdateSub(ctx context.Context, sub *t.Subscription, subId t.IdSubParam) (*t.Subscription, error) {
+func (s *SubService) UpdateSub(ctx context.Context, sub *t.SubscriptionCreate, subId t.IdSubParam) (*t.Subscription, error) {
 	const op = "service.subscription.UpdateSub"
 	logger := s.logger.With("op", op)
 
-	// не меняем id и избегаем нулевого значения
-	sub.SubId = &subId
-
 	logger.Debug("converting api type into domain type")
-	domSub := converter.ToDomainSubscription(sub)
+	domSub := converter.ToDomainCreateSubscription(sub)
 
 	logger.Debug("Trying to update sub")
+	domSub.Id = subId // передаем нужное id
 	updatedSub, err := s.subProvider.UpdateSub(ctx, domSub)
 	if err != nil {
 		logger.Error("Failed to update sub")
