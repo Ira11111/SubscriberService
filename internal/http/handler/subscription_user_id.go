@@ -10,7 +10,7 @@ import (
 )
 
 func (h *Handler) GetSubscriptionsUsersUserIdTotal(w http.ResponseWriter, r *http.Request, userId api.IdUserParam, params api.GetSubscriptionsUsersUserIdTotalParams) {
-	const op = "http.subscription.GetSubscriptionsUsersUserIdTotal"
+	const op = "http.subscription_user_id.GetSubscriptionsUsersUserIdTotal"
 	logger := h.logger.With("op", op)
 	ctx := r.Context()
 	startDate, endDate := params.StartDate, params.EndDate
@@ -47,7 +47,7 @@ func (h *Handler) GetSubscriptionsUsersUserIdTotal(w http.ResponseWriter, r *htt
 }
 
 func (h *Handler) DeleteSubscriptionsSubIdUsersUserId(w http.ResponseWriter, r *http.Request, subId api.IdSubParam, userId api.IdUserParam) {
-	const op = "service.subscription.DeleteSubscriptionsSubIdUsersUserId"
+	const op = "http.subscription_user_id.DeleteSubscriptionsSubIdUsersUserId"
 	logger := h.logger.With("op", op)
 	ctx := r.Context()
 	logger.Debug("Trying to delete user sub")
@@ -70,7 +70,7 @@ func (h *Handler) DeleteSubscriptionsSubIdUsersUserId(w http.ResponseWriter, r *
 }
 
 func (h *Handler) GetSubscriptionsSubIdUsersUserId(w http.ResponseWriter, r *http.Request, subId api.IdSubParam, userId api.IdUserParam) {
-	const op = "service.subscription.GetSubscriptionsSubIdUsersUserId"
+	const op = "http.subscription_user_id.GetSubscriptionsSubIdUsersUserId"
 	logger := h.logger.With("op", op)
 	ctx := r.Context()
 	logger.Debug("Trying to get subscription")
@@ -108,8 +108,7 @@ func (h *Handler) GetSubscriptionsSubIdUsersUserId(w http.ResponseWriter, r *htt
 }
 
 func (h *Handler) PutSubscriptionsSubIdUsersUserId(w http.ResponseWriter, r *http.Request, subId api.IdSubParam, userId api.IdUserParam) {
-	//TODO: починить с нормальной схемой
-	const op = "service.subscription.PutSubscriptionsSubIdUsersUserId"
+	const op = "http.subscription_user_id.PutSubscriptionsSubIdUsersUserId"
 	logger := h.logger.With("op", op)
 
 	logger.Debug("Reading request body")
@@ -121,7 +120,7 @@ func (h *Handler) PutSubscriptionsSubIdUsersUserId(w http.ResponseWriter, r *htt
 	}
 	defer r.Body.Close()
 
-	var userSub api.SubscriptionUser
+	var userSub api.SubscriptionUserUpdate
 	logger.Debug("Unmarshalling JSON")
 	if err = json.Unmarshal(body, &userSub); err != nil {
 		logger.Error("Parsing json error")
@@ -131,7 +130,7 @@ func (h *Handler) PutSubscriptionsSubIdUsersUserId(w http.ResponseWriter, r *htt
 
 	ctx := r.Context()
 	logger.Debug("Updating user subscription")
-	updatedSub, err := h.subIdUserIdService.UpdateUserSub(ctx, &userId, subId, &userSub)
+	updatedSub, err := h.subIdUserIdService.UpdateUserSub(ctx, userId, subId, &userSub)
 	if err != nil {
 		if errors.Is(err, service.ErrOperationFailed) {
 			logger.Error("Failed to update subscription")

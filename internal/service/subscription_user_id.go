@@ -7,10 +7,11 @@ import (
 	"SubscriberService/internal/repository"
 	"context"
 	"errors"
+	"fmt"
 )
 
 func (s *SubService) GetUserSubById(ctx context.Context, userId *t.IdUserParam, subId t.IdSubParam) (*t.SubscriptionUser, error) {
-	const op = "service.subscription.GetUserSubById"
+	const op = "service.subscription_user_id.GetUserSubById"
 	logger := s.logger.With("op", op)
 
 	logger.Debug("Trying to find user sub")
@@ -30,19 +31,21 @@ func (s *SubService) GetUserSubById(ctx context.Context, userId *t.IdUserParam, 
 	logger.Info("Find sub successful")
 	return apiSub, nil
 }
-func (s *SubService) UpdateUserSub(ctx context.Context, userId *t.IdUserParam, subId t.IdSubParam, userSub *t.SubscriptionUser) (*t.SubscriptionUser, error) {
-	const op = "service.subscription.UpdateUserSub"
+func (s *SubService) UpdateUserSub(ctx context.Context, userId t.IdUserParam, subId t.IdSubParam, userSub *t.SubscriptionUserUpdate) (*t.SubscriptionUser, error) {
+	const op = "service.subscription_user_id.UpdateUserSub"
 	logger := s.logger.With("op", op)
-	//TODO: переделать для обновления даты и вообще починить
 
 	logger.Debug("converting api type into domain type")
-	domSub := converter.ToDomainSubscriptionUser(userSub)
+	domSub := converter.ToDomainSubscriptionUserUpdate(userSub)
+	domSub.UserId = userId
+	domSub.SubId = subId
 
 	logger.Debug("Trying to update sub")
-	f := filter.NewFilterBuilder().WithUserID(userId).WithSubID(subId).Build()
+	f := filter.NewFilterBuilder().WithUserID(&userId).WithSubID(subId).Build()
 	updatedSub, err := s.subIdUserIdProvider.UpdateUserSub(ctx, &f, domSub)
 
 	if err != nil {
+		fmt.Println(err.Error())
 		logger.Error("Failed to update sub")
 		if errors.Is(err, repository.ErrUpdateFailed) {
 			return nil, ErrOperationFailed
@@ -59,7 +62,7 @@ func (s *SubService) UpdateUserSub(ctx context.Context, userId *t.IdUserParam, s
 	return apiData, nil
 }
 func (s *SubService) DeleteUserSub(ctx context.Context, userId *t.IdUserParam, subId t.IdSubParam) error {
-	const op = "service.subscription.DeleteUserSub"
+	const op = "service.subscription_user_id.DeleteUserSub"
 	logger := s.logger.With("op", op)
 
 	logger.Debug("Trying to delete user sub")
@@ -79,7 +82,7 @@ func (s *SubService) DeleteUserSub(ctx context.Context, userId *t.IdUserParam, s
 	return nil
 }
 func (s *SubService) GetUserTotal(ctx context.Context, userId *t.IdUserParam, startDate *t.StartDateParam, endDate *t.EndDateParam) (*t.SubSum, error) {
-	const op = "service.subscription.GetUserTotal"
+	const op = "service.subscription_user_id.GetUserTotal"
 	logger := s.logger.With("op", op)
 
 	logger.Debug("Trying to find user sub")

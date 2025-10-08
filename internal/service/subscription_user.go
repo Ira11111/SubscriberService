@@ -92,7 +92,7 @@ func (s *SubService) GetUsersForSub(
 	logger := s.logger.With("op", op)
 
 	lim, off := parsePagination(limit, offset)
-	end, st := parseDate(startDate, endDate)
+	st, end := parseDate(startDate, endDate)
 	f := filter.NewFilterBuilder().
 		WithPagination(lim, off).
 		WithSubID(subId).
@@ -125,7 +125,6 @@ func (s *SubService) GetSubsForUser(
 	startDate *t.StartDateParam,
 	endDate *t.EndDateParam,
 ) ([]*t.SubscriptionUser, error) {
-	//TODO: починить end_date
 	const op = "service.subscription_user.GetSubsForUser"
 	logger := s.logger.With("op", op)
 

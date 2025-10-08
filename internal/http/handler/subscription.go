@@ -158,7 +158,6 @@ func (h *Handler) GetSubscriptionsSubId(w http.ResponseWriter, r *http.Request, 
 }
 
 func (h *Handler) PutSubscriptionsSubId(w http.ResponseWriter, r *http.Request, subId api.IdSubParam) {
-	//TODO: поменять типы для subscription и subscriptionCreate + настроить валидацию полей
 	const op = "service.subscription.PutSubscriptionsSubId"
 	logger := h.logger.With("op", op)
 

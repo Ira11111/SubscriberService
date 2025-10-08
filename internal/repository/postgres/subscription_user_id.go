@@ -17,11 +17,13 @@ func (s *Storage) GetUserSubById(ctx context.Context, options *filter.FilterOpti
 	FROM subscription_user su INNER JOIN subscription s on s.id = su.id_sub`
 
 	filteredQuery, args := filter.BuildQuery(query, options)
-
+	fmt.Printf("FINAL QUERY: %s\n", filteredQuery)
+	fmt.Printf("FINAL ARGS: %v\n", args)
 	var res d.SubscriptionUser
 
 	err := sqlx.GetContext(ctx, s.db, &res, filteredQuery, args...)
 	if err != nil {
+		fmt.Println(err.Error())
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, repository.ErrDataNotFoud
 		}
@@ -34,12 +36,13 @@ func (s *Storage) UpdateUserSub(ctx context.Context, options *filter.FilterOptio
 	query := `UPDATE subscription_user su SET start_date = :start_date, end_date = :end_date 
             WHERE su.id_sub = :id_sub AND su.id_user = :id_user`
 
-	rows, err := sqlx.NamedQueryContext(ctx, s.db, query, userSub)
+	rows, err := sqlx.NamedExecContext(ctx, s.db, query, userSub)
 	if err != nil {
-		fmt.Println(err.Error())
 		return nil, repository.ErrUpdateFailed
 	}
-	if !rows.Next() {
+
+	_, err = rows.RowsAffected()
+	if err != nil {
 		return nil, repository.ErrDataNotFoud
 	}
 
@@ -50,7 +53,7 @@ func (s *Storage) UpdateUserSub(ctx context.Context, options *filter.FilterOptio
 func (s *Storage) DeleteUserSub(ctx context.Context, options *filter.FilterOptions) error {
 	query := `DELETE FROM subscription_user su`
 	filteredQuery, args := filter.BuildQuery(query, options)
-
+	fmt.Println(options, filteredQuery)
 	result, err := s.db.ExecContext(ctx, filteredQuery, args...)
 
 	if err != nil {

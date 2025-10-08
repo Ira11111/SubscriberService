@@ -6,18 +6,21 @@ import (
 	"database/sql"
 )
 
-func ToDomainSubscription(apiSub *generated.Subscription) *domains.Subscription {
-	return &domains.Subscription{
-		Price:       apiSub.Price,
-		ServiceName: apiSub.ServiceName,
-		Id:          apiSub.SubId,
-	}
-}
-
 func ToDomainCreateSubscription(apiSub *generated.SubscriptionCreate) *domains.Subscription {
 	return &domains.Subscription{
 		ServiceName: apiSub.ServiceName,
 		Price:       apiSub.Price,
+	}
+}
+
+func ToDomainSubscriptionUserUpdate(apiSub *generated.SubscriptionUserUpdate) *domains.SubscriptionUser {
+	endDate := sql.NullTime{
+		Time:  apiSub.EndDate.Time,
+		Valid: true,
+	}
+	return &domains.SubscriptionUser{
+		EndDate:   endDate,
+		StartDate: apiSub.StartDate.Time,
 	}
 }
 

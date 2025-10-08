@@ -21,9 +21,11 @@ func BuildQuery(baseQuery string, filter *FilterOptions) (string, []interface{})
 	// Добавляем условия фильтрации
 	builder.addCondition("su.id_sub = $%d", filter.SubID)
 	builder.addCondition("su.id_user = $%d", filter.UserID)
-	builder.addCondition("s.name ILIKE $%d", "%"+filter.SubName+"%")
 	builder.addCondition("su.start_date >= $%d", filter.StartDate)
-	builder.addCondition("su.start_date <= $%d", filter.EndDate)
+	builder.addCondition("su.end_date <= $%d", filter.EndDate)
+
+	//отдельный метод чтобы валидировать аргумент и обернуть в %%
+	builder.addILikeCondition("s.name ILIKE $%d", filter.SubName)
 
 	// Собираем полный запрос
 	query := builder.baseQuery
@@ -45,11 +47,21 @@ func BuildQuery(baseQuery string, filter *FilterOptions) (string, []interface{})
 	return query, builder.args
 }
 
-// addCondition - добавляет условие если значение не nil/zero
 func (b *QueryBuilder) addCondition(condition string, value interface{}) {
 	if b.isValidValue(value) {
 		b.conditions = append(b.conditions, fmt.Sprintf(condition, len(b.args)+1))
 		b.args = append(b.args, b.formatValue(value))
+	}
+}
+
+func (b *QueryBuilder) addILikeCondition(condition string, value interface{}) {
+	if b.isValidValue(value) {
+		formattedValue := b.formatValue(value)
+		if str, ok := formattedValue.(string); ok {
+			formattedValue = "%" + str + "%"
+		}
+		b.conditions = append(b.conditions, fmt.Sprintf(condition, len(b.args)+1))
+		b.args = append(b.args, formattedValue)
 	}
 }
 
@@ -77,7 +89,7 @@ func (b *QueryBuilder) isValidValue(value interface{}) bool {
 func (b *QueryBuilder) formatValue(value interface{}) interface{} {
 	switch v := value.(type) {
 	case *string:
-		return "%" + *v + "%" // добавляем wildcards для LIKE
+		return *v
 	case *int64:
 		return *v
 	case *time.Time:

@@ -26,6 +26,19 @@ schemas:
       - service_name
       - price
 
+  SubscriptionUserUpdate:
+    type: object
+    properties:
+      start_date:
+        type: string
+        format: date
+      end_date:
+        type: string
+        format: date
+    required:
+      - start_date
+      - end_date
+
   SubscriptionUserCreate:
     type: object
     properties:

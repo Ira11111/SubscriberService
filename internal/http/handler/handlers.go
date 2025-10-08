@@ -59,7 +59,7 @@ Paths:
 */
 type SubscriptionIdUserIdService interface {
 	GetUserSubById(ctx context.Context, userId *api.IdUserParam, subId api.IdSubParam) (*api.SubscriptionUser, error)
-	UpdateUserSub(ctx context.Context, userId *api.IdUserParam, subId api.IdSubParam, userSub *api.SubscriptionUser) (*api.SubscriptionUser, error)
+	UpdateUserSub(ctx context.Context, userId api.IdUserParam, subId api.IdSubParam, userSub *api.SubscriptionUserUpdate) (*api.SubscriptionUser, error)
 	DeleteUserSub(ctx context.Context, userId *api.IdUserParam, subId api.IdSubParam) error
 	GetUserTotal(ctx context.Context, userId *api.IdUserParam, startDate *api.StartDateParam, endDate *api.EndDateParam) (*api.SubSum, error)
 }
