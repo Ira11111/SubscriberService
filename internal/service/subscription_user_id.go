@@ -15,7 +15,10 @@ func (s *SubService) GetUserSubById(ctx context.Context, userId *t.IdUserParam, 
 	logger := s.logger.With("op", op)
 
 	logger.Debug("Trying to find user sub")
-	f := filter.NewFilterBuilder().WithUserID(userId).WithSubID(subId).Build()
+	f := filter.NewFilterBuilder().
+		WithEqualCondition("su.id_user", userId).
+		WithEqualCondition("su.id_sub", subId).
+		Build()
 	data, err := s.subIdUserIdProvider.GetUserSubById(ctx, &f)
 
 	if err != nil {
@@ -41,7 +44,10 @@ func (s *SubService) UpdateUserSub(ctx context.Context, userId t.IdUserParam, su
 	domSub.SubId = subId
 
 	logger.Debug("Trying to update sub")
-	f := filter.NewFilterBuilder().WithUserID(&userId).WithSubID(subId).Build()
+	f := filter.NewFilterBuilder().
+		WithEqualCondition("su.id_user", userId).
+		WithEqualCondition("su.id_sub", subId).
+		Build()
 	updatedSub, err := s.subIdUserIdProvider.UpdateUserSub(ctx, &f, domSub)
 
 	if err != nil {
@@ -66,7 +72,10 @@ func (s *SubService) DeleteUserSub(ctx context.Context, userId *t.IdUserParam, s
 	logger := s.logger.With("op", op)
 
 	logger.Debug("Trying to delete user sub")
-	f := filter.NewFilterBuilder().WithUserID(userId).WithSubID(subId).Build()
+	f := filter.NewFilterBuilder().
+		WithEqualCondition("su.id_user", userId).
+		WithEqualCondition("su.id_sub", subId).
+		Build()
 	err := s.subIdUserIdProvider.DeleteUserSub(ctx, &f)
 	if err != nil {
 		logger.Error("Failed to delete user sub")
@@ -87,7 +96,9 @@ func (s *SubService) GetUserTotal(ctx context.Context, userId *t.IdUserParam, st
 
 	logger.Debug("Trying to find user sub")
 	st, end := parseDate(startDate, endDate)
-	f := filter.NewFilterBuilder().WithUserID(userId).WithDateRange(st, end).Build()
+	f := filter.NewFilterBuilder().
+		WithEqualCondition("su.id_user", userId).
+		WithDateRange(st, end).Build()
 	res, err := s.subIdUserIdProvider.GetUserTotal(ctx, &f)
 
 	if err != nil {

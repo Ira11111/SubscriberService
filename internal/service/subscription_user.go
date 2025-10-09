@@ -59,7 +59,7 @@ func (s *SubService) GetUserSubs(
 
 	f := filter.NewFilterBuilder().
 		WithPagination(lim, off).
-		WithSubName(subName).
+		WithILikeCondition("s.name", subName).
 		WithDateRange(st, end).
 		Build()
 
@@ -95,7 +95,7 @@ func (s *SubService) GetUsersForSub(
 	st, end := parseDate(startDate, endDate)
 	f := filter.NewFilterBuilder().
 		WithPagination(lim, off).
-		WithSubID(subId).
+		WithEqualCondition("su.id_sub", subId).
 		WithDateRange(st, end).
 		Build()
 
@@ -133,8 +133,8 @@ func (s *SubService) GetSubsForUser(
 
 	f := filter.NewFilterBuilder().
 		WithPagination(lim, off).
-		WithUserID(userId).
-		WithSubName(subName).
+		WithEqualCondition("su.id_user", userId).
+		WithILikeCondition("s.name", subName).
 		WithDateRange(st, end).
 		Build()
 

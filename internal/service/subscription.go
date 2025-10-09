@@ -46,7 +46,7 @@ func (s *SubService) GetSubs(ctx context.Context, limit *t.LimitParam, offset *t
 
 	logger.Debug("parsing pagination params")
 	lim, off := parsePagination(limit, offset)
-	f := filter.NewFilterBuilder().WithPagination(lim, off).WithSubName(subName).Build()
+	f := filter.NewFilterBuilder().WithPagination(lim, off).WithILikeCondition("s.name", subName).Build()
 
 	logger.Debug("trying to get subs")
 	subs, err = s.subProvider.GetSubs(ctx, &f)

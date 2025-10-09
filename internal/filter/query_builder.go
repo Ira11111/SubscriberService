@@ -18,14 +18,19 @@ func BuildQuery(baseQuery string, filter *FilterOptions) (string, []interface{})
 		args:      make([]interface{}, 0),
 	}
 
-	// Добавляем условия фильтрации
-	builder.addCondition("su.id_sub = $%d", filter.SubID)
-	builder.addCondition("su.id_user = $%d", filter.UserID)
+	for _, cond := range filter.conditions {
+		condStr := fmt.Sprintf("%s %s", cond.Field, cond.Operation)
+		if cond.Operation == ILikeOP || cond.Operation == LikeOP {
+			//отдельный метод чтобы валидировать аргумент и обернуть в %%
+			builder.addTextSearchCondition(condStr+" $%d", cond.Value)
+		} else {
+			builder.addCondition(condStr+" $%d", cond.Value)
+		}
+	}
+
+	// добавляем даты если нужно и пагинацию
 	builder.addCondition("su.start_date >= $%d", filter.StartDate)
 	builder.addCondition("su.end_date <= $%d", filter.EndDate)
-
-	//отдельный метод чтобы валидировать аргумент и обернуть в %%
-	builder.addILikeCondition("s.name ILIKE $%d", filter.SubName)
 
 	// Собираем полный запрос
 	query := builder.baseQuery
@@ -43,7 +48,7 @@ func BuildQuery(baseQuery string, filter *FilterOptions) (string, []interface{})
 		query += fmt.Sprintf(" OFFSET $%d", len(builder.args)+1)
 		builder.args = append(builder.args, filter.Offset)
 	}
-
+	fmt.Println(query, builder.args)
 	return query, builder.args
 }
 
@@ -54,7 +59,7 @@ func (b *QueryBuilder) addCondition(condition string, value interface{}) {
 	}
 }
 
-func (b *QueryBuilder) addILikeCondition(condition string, value interface{}) {
+func (b *QueryBuilder) addTextSearchCondition(condition string, value interface{}) {
 	if b.isValidValue(value) {
 		formattedValue := b.formatValue(value)
 		if str, ok := formattedValue.(string); ok {

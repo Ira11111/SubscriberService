@@ -2,24 +2,38 @@ package filter
 
 import "time"
 
+type QueryOperation string
+
 const (
 	limitDefault  = 20
 	offsetDefault = 0
 )
+
+var (
+	ILikeOP QueryOperation = "ILIKE"
+	LikeOP  QueryOperation = "LIKE"
+	EqOP    QueryOperation = "="
+	GrOP    QueryOperation = ">"
+	LessOp  QueryOperation = "<"
+)
+
+type condition struct {
+	Field     string
+	Value     interface{}
+	Operation QueryOperation // "=", "ILIKE"
+}
 
 type FilterOptions struct {
 	// Пагинация
 	Limit  int64
 	Offset int64
 
-	// Основные фильтры
-	SubID   int64
-	UserID  string
-	SubName string
-
 	// Фильтры по дате
 	StartDate *time.Time
 	EndDate   *time.Time
+
+	// Динамические фильтры
+	conditions []*condition
 }
 
 type FilterBuilder struct {
@@ -42,23 +56,57 @@ func (b *FilterBuilder) WithPagination(limit, offset int64) *FilterBuilder {
 	return b
 }
 
-func (b *FilterBuilder) WithSubID(subID int64) *FilterBuilder {
-	b.filter.SubID = subID
-	return b
-}
-
-func (b *FilterBuilder) WithUserID(userID *string) *FilterBuilder {
-	b.filter.UserID = ""
-	if userID != nil {
-		b.filter.UserID = *userID
+func (b *FilterBuilder) WithEqualCondition(field string, value interface{}) *FilterBuilder {
+	if value != nil && value != "" && value != 0 {
+		b.filter.conditions = append(b.filter.conditions, &condition{
+			Field:     field,
+			Value:     value,
+			Operation: EqOP,
+		})
 	}
 	return b
 }
 
-func (b *FilterBuilder) WithSubName(subName *string) *FilterBuilder {
-	b.filter.SubName = ""
-	if subName != nil {
-		b.filter.SubName = *subName
+func (b *FilterBuilder) WithGreaterCondition(field string, value interface{}) *FilterBuilder {
+	if value != nil && value != "" && value != 0 {
+		b.filter.conditions = append(b.filter.conditions, &condition{
+			Field:     field,
+			Value:     value,
+			Operation: GrOP,
+		})
+	}
+	return b
+}
+
+func (b *FilterBuilder) WithLessCondition(field string, value interface{}) *FilterBuilder {
+	if value != nil && value != "" && value != 0 {
+		b.filter.conditions = append(b.filter.conditions, &condition{
+			Field:     field,
+			Value:     value,
+			Operation: LessOp,
+		})
+	}
+	return b
+}
+
+func (b *FilterBuilder) WithILikeCondition(field string, value interface{}) *FilterBuilder {
+	if value != nil && value != "" && value != 0 {
+		b.filter.conditions = append(b.filter.conditions, &condition{
+			Field:     field,
+			Value:     value,
+			Operation: ILikeOP,
+		})
+	}
+	return b
+}
+
+func (b *FilterBuilder) WithLikeCondition(field string, value interface{}) *FilterBuilder {
+	if value != nil && value != "" && value != 0 {
+		b.filter.conditions = append(b.filter.conditions, &condition{
+			Field:     field,
+			Value:     value,
+			Operation: LikeOP,
+		})
 	}
 	return b
 }
